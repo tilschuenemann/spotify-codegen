@@ -1,5 +1,7 @@
 # bring back spotify album + code
 
+![preview](preview.png)
+
 Spotify used to display its album art and spotify code in one picture after clicking the kebab menu. This still works on mobile, but not in the web player nor in the desktop version.
 
 I've already started pinning scannable album covers on my wall and wanted to continue, thus creating this hacked-together script.
