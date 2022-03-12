@@ -21,4 +21,3 @@ Could it be done in a leaner way? Yes!
 You'll need the URI of each album and enter it into the list_of_albums variable. This will change in the future, where commandline arguments will be read.
 
 To use the Spotify API, you'll have to create an app and export SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET.
-
