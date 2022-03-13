@@ -6,6 +6,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import argparse
 import os
 import time
+import urllib.request
 
 start = time.time()
 
@@ -29,7 +30,7 @@ for album_uri in args.uris:
     link_to_cover = results["images"][0]["url"]
     cover_size = results["images"][0]["height"]
 
-    wget.download(link_to_cover, out=f"{args.out}{album_uri}.png",bar=None)
+    urllib.request.urlretrieve(url=link_to_cover, filename=f"{args.out}{album_uri}.png")
     print(f"{album_uri}\t[x][ ][ ]\tdownloaded cover")
 
     ### get dominant color from cover
@@ -47,7 +48,7 @@ for album_uri in args.uris:
     ## get spotify code 
     url = f"https://www.spotifycodes.com/downloadCode.php?uri=png%2F{dominant_color_hex}%2F{code_color}%2F{cover_size}%2F{album_uri_call}"
 
-    wget.download(url, out = f"{args.out}{album_uri}_code.png",bar=None)
+    urllib.request.urlretrieve(url=url, filename=f"{args.out}{album_uri}_code.png")
     print(f"{album_uri}\t[x][x][ ]\tdownloaded spotify code")
 
     ## merge images
