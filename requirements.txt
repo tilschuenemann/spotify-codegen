@@ -1,0 +1,4 @@
+colorthief==0.2.1
+opencv-python==4.5.5.64
+wget==3.2
+spotipy==2.19.0
