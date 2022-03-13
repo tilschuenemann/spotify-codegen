@@ -22,6 +22,7 @@ if(os.path.isdir(args.out)==False):
 spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
 for album_uri in args.uris:
+    
 
     ## get album cover and height from spotify API
     results = spotify.album(album_uri)
@@ -30,6 +31,7 @@ for album_uri in args.uris:
     cover_size = results["images"][0]["height"]
 
     wget.download(link_to_cover, out=f"{args.out}{album_uri}.png",bar=None)
+    print(f"{album_uri}\t[x][ ][ ]\tdownloaded cover")
 
     ### get dominant color from cover
     def rgb_to_hex(rgb):
@@ -47,6 +49,7 @@ for album_uri in args.uris:
     url = f"https://www.spotifycodes.com/downloadCode.php?uri=png%2F{dominant_color_hex}%2F{code_color}%2F{cover_size}%2F{album_uri_call}"
 
     wget.download(url, out = f"{args.out}{album_uri}_code.png",bar=None)
+    print(f"{album_uri}\t[x][x][ ]\tdownloaded spotify code")
 
     ## merge images
     album_art = Image.open(f"{args.out}{album_uri}.png")
@@ -59,7 +62,8 @@ for album_uri in args.uris:
     im.paste(album_art, (0,0))
     im.paste(album_code, (0,cover_size))
     im.save(f"{args.out}x_{album_uri}.png")
+    print(f"{album_uri}\t[x][x][x]\tmerged images")
 
 # TODO formatting
 end = time.time()
-print(f"it took {end-start} ")
+print(f"finished in {end-start:.1f}s")
