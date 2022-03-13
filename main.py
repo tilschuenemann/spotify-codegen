@@ -10,8 +10,8 @@ import time
 start = time.time()
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--out",dest="out",type=str,required=True)
-parser.add_argument("--uris",dest="uris",nargs="+",type=str,required=True)
+parser.add_argument("--out",dest="out",type=str,required=True,help="filepath for output")
+parser.add_argument("--uris",dest="uris",nargs="+",type=str,required=True, help="Spotify album URI(s)")
 args = parser.parse_args()
 
 if(os.path.isdir(args.out)==False):
