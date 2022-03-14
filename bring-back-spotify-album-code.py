@@ -1,5 +1,4 @@
 import spotipy
-import wget
 from colorthief import ColorThief
 from PIL import Image
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -24,6 +23,8 @@ spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
 for album_uri in args.uris:
     
+    cover_time_start = time.time()
+
     ## get album cover and height from spotify API
     results = spotify.album(album_uri)
 
@@ -31,7 +32,8 @@ for album_uri in args.uris:
     cover_size = results["images"][0]["height"]
 
     urllib.request.urlretrieve(url=link_to_cover, filename=f"{args.out}{album_uri}.png")
-    print(f"{album_uri}\t[x][ ][ ]\tdownloaded cover")
+    cover_time_end = time.time()
+    print(f"{album_uri}\t[x][ ][ ]\t{cover_time_end-cover_time_start:.1f}s\tdownloaded cover")
 
     ### get dominant color from cover
     def rgb_to_hex(rgb):
@@ -46,23 +48,27 @@ for album_uri in args.uris:
     album_uri_call = album_uri.replace(":", "%3A")
 
     ## get spotify code 
+    code_time_start = time.time()
     url = f"https://www.spotifycodes.com/downloadCode.php?uri=png%2F{dominant_color_hex}%2F{code_color}%2F{cover_size}%2F{album_uri_call}"
 
     urllib.request.urlretrieve(url=url, filename=f"{args.out}{album_uri}_code.png")
-    print(f"{album_uri}\t[x][x][ ]\tdownloaded spotify code")
+    code_time_end = time.time()
+    print(f"{album_uri}\t[x][x][ ]\t{code_time_end-code_time_start:.1f}s\tdownloaded spotify code")
 
     ## merge images
+    merge_start = time.time()
     album_art = Image.open(f"{args.out}{album_uri}.png")
     album_code = Image.open(f"{args.out}{album_uri}_code.png")
 
     # TODO investigate if rounding errors map code to a lesser image size
-    final_height = int(cover_size*1.25)
+    final_height = album_code.size[1]+cover_size
 
     im = Image.new(mode="RGB", size=(cover_size, final_height))
     im.paste(album_art, (0,0))
     im.paste(album_code, (0,cover_size))
     im.save(f"{args.out}x_{album_uri}.png")
-    print(f"{album_uri}\t[x][x][x]\tmerged images")
+    merge_end = time.time()
+    print(f"{album_uri}\t[x][x][x]\t{merge_end-merge_start:.1f}s\tmerged images")
 
 end = time.time()
 print(f"finished in {end-start:.1f}s")
