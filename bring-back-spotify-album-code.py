@@ -60,7 +60,6 @@ for album_uri in args.uris:
     album_art = Image.open(f"{args.out}{album_uri}.png")
     album_code = Image.open(f"{args.out}{album_uri}_code.png")
 
-    # TODO investigate if rounding errors map code to a lesser image size
     final_height = album_code.size[1]+cover_size
 
     im = Image.new(mode="RGB", size=(cover_size, final_height))
