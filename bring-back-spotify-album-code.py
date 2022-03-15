@@ -5,7 +5,8 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import argparse
 import os
 import time
-import urllib.request
+from urllib.request import urlopen
+import io
 
 start = time.time()
 
@@ -25,22 +26,24 @@ for album_uri in args.uris:
     
     cover_time_start = time.time()
 
-    ## get album cover and height from spotify API
+    ## get album cover from spotify API
     results = spotify.album(album_uri)
-
     link_to_cover = results["images"][0]["url"]
     cover_size = results["images"][0]["height"]
+    album_art = Image.open(urlopen(link_to_cover))
 
-    urllib.request.urlretrieve(url=link_to_cover, filename=f"{args.out}{album_uri}.png")
     cover_time_end = time.time()
     print(f"{album_uri}\t[x][ ][ ]\t{cover_time_end-cover_time_start:.1f}s\tdownloaded cover")
 
     ### get dominant color from cover
+    # this doesnt write to disc and still allows colorthief to grab most dominant color
+    with io.BytesIO() as file_object:
+        album_art.save(file_object, "PNG")
+        cf = ColorThief(file_object)
+        dominant_color_rgb = cf.get_color(quality=1)
+
     def rgb_to_hex(rgb):
         return '#%02x%02x%02x' % rgb
-
-    color_thief = ColorThief(f"{args.out}{album_uri}.png")
-    dominant_color_rgb = color_thief.get_color(quality=1)
     dominant_color_hex = rgb_to_hex(dominant_color_rgb).replace("#", "")
     code_color = "white" if (dominant_color_rgb[0] 
                             + dominant_color_rgb[1] 
@@ -50,16 +53,13 @@ for album_uri in args.uris:
     ## get spotify code 
     code_time_start = time.time()
     url = f"https://www.spotifycodes.com/downloadCode.php?uri=png%2F{dominant_color_hex}%2F{code_color}%2F{cover_size}%2F{album_uri_call}"
+    album_code = Image.open(urlopen(url))
 
-    urllib.request.urlretrieve(url=url, filename=f"{args.out}{album_uri}_code.png")
     code_time_end = time.time()
     print(f"{album_uri}\t[x][x][ ]\t{code_time_end-code_time_start:.1f}s\tdownloaded spotify code")
 
     ## merge images
     merge_start = time.time()
-    album_art = Image.open(f"{args.out}{album_uri}.png")
-    album_code = Image.open(f"{args.out}{album_uri}_code.png")
-
     final_height = album_code.size[1]+cover_size
 
     im = Image.new(mode="RGB", size=(cover_size, final_height))

@@ -12,9 +12,6 @@ This was written in Python and works in Python 3.10.2 using the following depend
 * spotipy
 * colorthief
 * pil
-* wget
-
-Could it be done in a leaner way? Yes!
 
 # Usage
 
