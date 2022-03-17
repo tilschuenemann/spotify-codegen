@@ -45,9 +45,9 @@ for album_uri in args.uris:
     def rgb_to_hex(rgb):
         return '#%02x%02x%02x' % rgb
     dominant_color_hex = rgb_to_hex(dominant_color_rgb).replace("#", "")
-    code_color = "white" if (dominant_color_rgb[0] 
+    code_color = "black" if (dominant_color_rgb[0] 
                             + dominant_color_rgb[1] 
-                            + dominant_color_rgb[2]) / 3 > 127 else "black"
+                            + dominant_color_rgb[2]) / 3 > 127 else "white"
     album_uri_call = album_uri.replace(":", "%3A")
 
     ## get spotify code 
