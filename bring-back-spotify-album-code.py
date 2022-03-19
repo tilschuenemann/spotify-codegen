@@ -11,13 +11,17 @@ import io
 start = time.time()
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--out",dest="out",type=str,required=True,help="filepath for output")
-parser.add_argument("--uris",dest="uris",nargs="+",type=str,required=True, help="Spotify album URI(s)")
+parser.add_argument("--out","-o",dest="out",type=str,help="filepath for output")
+parser.add_argument("--uris","-u",dest="uris",nargs="+",type=str,required=True, help="Spotify album URI(s)")
 args = parser.parse_args()
 
-if(os.path.isdir(args.out)==False):
-    print("supplied path is not a folder")
-    exit()
+if(args.out is None):
+    output_path = os.path.dirname(os.path.realpath(__file__))
+else:
+    if(os.path.isdir(args.out)==False):
+        print("supplied path is not a folder")
+        exit()
+    output_path = args.out
 
 # SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET need to be exported first
 spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
@@ -65,7 +69,7 @@ for album_uri in args.uris:
     im = Image.new(mode="RGB", size=(cover_size, final_height))
     im.paste(album_art, (0,0))
     im.paste(album_code, (0,cover_size))
-    im.save(f"{args.out}x_{album_uri}.png")
+    im.save(f"{output_path}/x_{album_uri}.png")
     merge_end = time.time()
     print(f"{album_uri}\t[x][x][x]\t{merge_end-merge_start:.1f}s\tmerged images")
 
