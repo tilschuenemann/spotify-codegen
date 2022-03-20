@@ -1,12 +1,13 @@
 import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 from colorthief import ColorThief
 from PIL import Image
-from spotipy.oauth2 import SpotifyClientCredentials
+
 import argparse
+import io
 import os
 import time
 from urllib.request import urlopen
-import io
 
 start = time.time()
 
