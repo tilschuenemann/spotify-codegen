@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "bbsac"
+version = "0.1.0"
+description = "Bring Back Spotify Album Codes"
+authors = ["schuenemann"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+colorthief = "^0.2.1"
+opencv-python = "^4.5.5"
+spotipy = "^2.19.0"
+tqdm = "^4.64.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
