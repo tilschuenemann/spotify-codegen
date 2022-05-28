@@ -33,12 +33,12 @@ def generate_album_codes(output_folder: str, album_uris: list[str]):
             exit()
 
     # SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET need to be exported first
-    spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+    spotipy = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
     for album_uri in tqdm.tqdm(album_uris, desc="generating album codes "):
 
         # get album cover from spotify API
-        results = spotify.album(album_uri)
+        results = spotipy.album(album_uri)
         link_to_cover = results["images"][0]["url"]
         cover_size = results["images"][0]["height"]
         album_art = Image.open(urlopen(link_to_cover))
