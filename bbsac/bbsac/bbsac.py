@@ -14,7 +14,7 @@ def rgb_to_hex(rgb):
     return "%02x%02x%02x" % rgb
 
 
-def generate_album_codes(output_folder: str, album_uris: list[str]):
+def generate_album_codes(output_folder: str, album_uris: str):
     """Generates images for each supplied album_uri that merges
     the album cover and its Spotify code.
 
@@ -22,7 +22,7 @@ def generate_album_codes(output_folder: str, album_uris: list[str]):
     -------
     output_folder: str
         folder to save results in
-    album_uris: list[str]
+    album_uris: str
         list of album uris
     """
     if output_folder is None:
@@ -31,6 +31,11 @@ def generate_album_codes(output_folder: str, album_uris: list[str]):
         if os.path.isdir(output_folder) is False:
             print("supplied path is not a folder")
             exit()
+
+    if not (album_uris and album_uris.strip()):
+        exit("uris are blank")
+    else:
+        album_uris = album_uris.split(",")
 
     # SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET need to be exported first
     spotipy = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
@@ -83,7 +88,7 @@ if __name__ == "__main__":
         nargs="+",
         type=str,
         required=True,
-        help="Spotify album URI(s)",
+        help="comma separated Spotify album URI(s)",
     )
     parser.add_argument(
         "-o", dest="out", type=str, required=False, help="path to output folder"
