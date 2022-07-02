@@ -85,7 +85,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-u",
         dest="uris",
-        nargs="+",
+        nargs=1,
         type=str,
         required=True,
         help="comma separated Spotify album URI(s)",
@@ -95,4 +95,4 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    generate_album_codes(args.out, args.uris)
+    generate_album_codes(args.out, args.uris[0])
