@@ -77,7 +77,9 @@ def generate_album_codes(output_folder: str, album_uris: str):
         im = Image.new(mode="RGB", size=(cover_size, final_height))
         im.paste(album_art, (0, 0))
         im.paste(album_code, (0, cover_size))
-        im.save(f"{output_folder}/{album_uri}.png")
+
+        filename = album_uri.replace(":", "-")
+        im.save(f"{output_folder}/{filename}.png")
 
 
 if __name__ == "__main__":
