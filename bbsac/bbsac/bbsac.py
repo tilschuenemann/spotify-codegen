@@ -72,18 +72,25 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     
     parser.add_argument(
-        "-u",
-        dest="uris",
-        nargs=1,
-        type=str,
-        required=True,
-        help="comma separated Spotify album URI(s)",
-    )
-    parser.add_argument(
         "-o", dest="out", type=str, required=False, help="path to output folder"
     )
 
-    parser.add_argument("-a",dest="all_albums",action="store_true",required=False,help="flag for fetching all albums in your music library")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument(
+        "--u",
+        dest="uris",
+        nargs=1,
+        type=str,
+        help="comma separated Spotify album URI(s)",
+    )
+    
+    group.add_argument(
+        "--a",
+        dest="all_albums",
+        action="store_true",
+        required=False,
+        help="flag for fetching all albums in your music library")
+
     args = parser.parse_args()
 
     # add current folder as fallback output folder
@@ -120,6 +127,5 @@ if __name__ == "__main__":
             offset+=50
             if len(results["items"])==0:
                 items = False
-
 
     generate_album_codes(output_folder, uri_list, sp)
