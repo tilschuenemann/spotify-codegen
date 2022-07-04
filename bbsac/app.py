@@ -31,7 +31,7 @@ def load_image(uri):
     if uri is None:
         return html.Div()
 
-    if re.match(r"^spotify:album:\d{20}$", uri): 
+    if re.match(r"^spotify:album:[A-Za-z0-9]{22}$", uri): 
         img = get_album_code(uri, sp)
         return html.Img(src=img)
     else:
