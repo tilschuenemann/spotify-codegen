@@ -14,8 +14,45 @@ from urllib.request import urlopen
 def rgb_to_hex(rgb):
     return "%02x%02x%02x" % rgb
 
+def get_album_code(album_uri: str, sp: spotipy.Spotify):
+    results = sp.album(album_uri)
+    link_to_cover = results["images"][0]["url"]
+    cover_size = results["images"][0]["height"]
+    album_art = Image.open(urlopen(link_to_cover))
 
-def generate_album_codes(output_folder: str, album_uris: list[str], sp: spotipy.Spotify):
+    # get dominant color from cover
+    # this doesnt write to disc and still allows colorthief to grab most dominant color
+    with io.BytesIO() as file_object:
+        album_art.save(file_object, "PNG")
+        cf = ColorThief(file_object)
+        dominant_color_rgb = cf.get_color(quality=1)
+
+    dominant_color_hex = rgb_to_hex(dominant_color_rgb)
+    code_color = (
+        "black"
+        if (dominant_color_rgb[0] + dominant_color_rgb[1] + dominant_color_rgb[2])
+        / 3
+        > 127
+        else "white"
+    )
+    album_uri_call = album_uri.replace(":", "%3A")
+
+    # get spotify code
+    url = (
+        "https://www.spotifycodes.com/downloadCode.php?uri=png%2F"
+        + f"{dominant_color_hex}%2F{code_color}%2F{cover_size}%2F{album_uri_call}"
+    )
+    album_code = Image.open(urlopen(url))
+
+    # merge images
+    final_height = album_code.size[1] + cover_size
+    im = Image.new(mode="RGB", size=(cover_size, final_height))
+    im.paste(album_art, (0, 0))
+    im.paste(album_code, (0, cover_size))
+    return im
+
+
+def save_album_codes(output_folder: str, album_uris: list[str], sp: spotipy.Spotify):
     """Generates images for each supplied album_uri that merges
     the album cover and its Spotify code.
 
@@ -27,43 +64,7 @@ def generate_album_codes(output_folder: str, album_uris: list[str], sp: spotipy.
         list of album uris
     """
     for album_uri in tqdm.tqdm(album_uris, desc="generating album codes "):
-
-        # get album cover from spotify API
-        results = sp.album(album_uri)
-        link_to_cover = results["images"][0]["url"]
-        cover_size = results["images"][0]["height"]
-        album_art = Image.open(urlopen(link_to_cover))
-
-        # get dominant color from cover
-        # this doesnt write to disc and still allows colorthief to grab most dominant color
-        with io.BytesIO() as file_object:
-            album_art.save(file_object, "PNG")
-            cf = ColorThief(file_object)
-            dominant_color_rgb = cf.get_color(quality=1)
-
-        dominant_color_hex = rgb_to_hex(dominant_color_rgb)
-        code_color = (
-            "black"
-            if (dominant_color_rgb[0] + dominant_color_rgb[1] + dominant_color_rgb[2])
-            / 3
-            > 127
-            else "white"
-        )
-        album_uri_call = album_uri.replace(":", "%3A")
-
-        # get spotify code
-        url = (
-            "https://www.spotifycodes.com/downloadCode.php?uri=png%2F"
-            + f"{dominant_color_hex}%2F{code_color}%2F{cover_size}%2F{album_uri_call}"
-        )
-        album_code = Image.open(urlopen(url))
-
-        # merge images
-        final_height = album_code.size[1] + cover_size
-        im = Image.new(mode="RGB", size=(cover_size, final_height))
-        im.paste(album_art, (0, 0))
-        im.paste(album_code, (0, cover_size))
-
+        im = get_album_code(album_uri, sp)
         filename = album_uri.replace(":", "-")
         im.save(f"{output_folder}/{filename}.png")
 
@@ -129,4 +130,4 @@ if __name__ == "__main__":
             if len(results["items"]) == 0:
                 items = False
 
-    generate_album_codes(output_folder, uri_list, sp)
+    save_album_codes(output_folder, uri_list, sp)
