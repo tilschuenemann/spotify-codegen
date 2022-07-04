@@ -103,10 +103,10 @@ if __name__ == "__main__":
         exit("supplied path is not a folder")
 
     if args.all_albums is False:
-        if not (args.uris and args.uris.strip()):
+        if not (args.uris[0] and args.uris[0].strip()):
             exit("uris are blank")
         else:
-            uri_list = args.uris.split(",")
+            uri_list = args.uris[0].split(",")
 
         # SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET need to be exported first
         sp = spotipy.Spotify(
