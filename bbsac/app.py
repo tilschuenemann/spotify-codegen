@@ -16,7 +16,7 @@ server = app.server
 
 app.layout = html.Div([
     html.H1("Bring Back Spotify Album Codes",className="text-4xl text-center"),
-    dcc.Input(id="uri", type="text",
+    dcc.Input(id="uri", type="text",debounce=True,
               placeholder="Enter Spotify Album URI here!"),
     html.Div(id="picture")],className="w-full h-screen bg-violet-800")
 
