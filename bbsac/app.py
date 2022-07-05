@@ -10,15 +10,16 @@ from urllib.request import urlopen
 import base64
 import re
 
-app = Dash(__name__,external_stylesheets=["https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"])
+app = Dash(__name__,external_stylesheets=["https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"],
+external_scripts=["https://www.googletagmanager.com/gtag/js?id=G-FGF24ELJ9L"])
 
 server = app.server
 
 app.layout = html.Div([
-    html.H1("Bring Back Spotify Album Codes",className="text-4xl text-center"),
+    html.H1("Bring Back Spotify Album Codes",className="text-4xl"),
     dcc.Input(id="uri", type="text",debounce=True,
               placeholder="Enter Spotify Album URI here!"),
-    html.Div(id="picture")],className="w-full h-screen bg-violet-800")
+    html.Div(id="picture")],className="grid justify-items-center p-4 w-full h-screen bg-violet-800")
 
 
 sp = spotipy.Spotify(
