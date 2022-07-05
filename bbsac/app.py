@@ -10,10 +10,38 @@ from urllib.request import urlopen
 import base64
 import re
 
-app = Dash(__name__,external_stylesheets=["https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"],
-external_scripts=["https://www.googletagmanager.com/gtag/js?id=G-FGF24ELJ9L"])
+app = Dash(__name__,external_stylesheets=["https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"])
 
 server = app.server
+
+app.index_string = '''
+        <!DOCTYPE html>
+        <html>
+        <head>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-FGF24ELJ9L"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-FGF24ELJ9L');
+        </script>
+        {%metas%}
+        <title>{%title%}</title>
+        {%favicon%}
+        {%css%}
+    </head>
+    <body>
+        {%app_entry%}
+        <footer>
+            {%config%}
+            {%scripts%}
+            {%renderer%}
+        </footer>
+    </body>
+</html>
+'''
 
 app.layout = html.Div([
     html.H1("Bring Back Spotify Album Codes",className="text-4xl"),
