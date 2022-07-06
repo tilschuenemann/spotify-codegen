@@ -9,8 +9,8 @@ from urllib.request import urlopen
 import base64
 import re
 
-app = Dash(__name__, external_stylesheets=[
-           "https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"])
+app = Dash("Spotify Art+Code",
+           external_scripts=["https://cdn.tailwindcss.com"])
 
 server = app.server
 
@@ -44,25 +44,68 @@ app.index_string = '''
 '''
 
 app.layout = html.Div([
-    html.Div(
-        ["Search By", dcc.Dropdown(id="search_by", options=[
-            "metadata", "uri"], value="metadata"),
-         ], className="w-64"),
     html.Div([
-        html.Div([html.H1("Search by Metadata"),
-                  dcc.Dropdown(id="search_type", options=[
-                      "album", "artist", "track"]),
-                  dcc.Input(id="search_general", type="text", debounce=True,
-                            placeholder="General Search:"),
-                  html.Button('Search!', id='search-trigger',
-                              n_clicks=0, className="bg-emerald-400 w-64"),
-                  ], className="grid align-center"),
-        html.Div([html.H1("Search by URI"),
-                  dcc.Input(id="search_uri", type="text", debounce=True,
-                            placeholder="Enter Spotify Album URI here!")]),
-        html.Div(id="picture"),
+        html.H1("Append Album / Artist / Song Art with Spotify Code!",
+                className="text-4xl text-green-500"),
 
-        dcc.Store(id="search_uriresult")], className="grid")])
+        # Search By
+        html.Div(
+            [html.H1("Search By", className="text-xl text-white"),
+             dcc.Dropdown(
+                id="search_by",
+                options=["metadata", "uri"],
+                value="metadata",
+                clearable=False,
+                className="h-10"),
+             ], className="grid align-center space-y-2 w-64 p-2"),
+
+        # Search By Metadata
+        html.Div(
+            [html.H1("Search by Metadata", className="text-xl text-white"),
+             dcc.Dropdown(id="search_type",
+                          options=["album", "artist", "track"],
+                          value="album",
+                          clearable=False,
+                          className="h-10"),
+             dcc.Input(id="search_general",
+                       type="text",
+                       debounce=True,
+                       placeholder="General Search:",
+                       className="h-10 p-2")
+             ], className="grid align-center space-y-2 w-64 p-2"),
+        # Search by URI
+        html.Div(
+            [html.H1("Search by URI", className="text-xl text-white"),
+             dcc.Input(id="search_uri",
+                       type="text",
+                       debounce=True,
+                       placeholder="Spotify URI",
+                       className="h-10 p-2")
+             ],
+            className="grid align-center space-y-4 w-64 p-2"),
+        html.Div([html.H1("Search by URL",className="text-xl text-white"),
+        dcc.Input(id="search_url",
+                       type="text",
+                       debounce=True,
+                       placeholder="Spotify URL",
+                       className="h-10 p-2")
+                    ],className="grid align-center space-y-4 w-64 p-2"),
+        # Search Button
+        html.Div([
+            html.Button(html.H1('Search!', className="text-xl font-bold"),
+                        id='search-trigger',
+                        n_clicks=0,
+                        className="bg-green-400 rounded-lg h-10 w-64")
+                        ]),
+        html.Div([html.P("This is hobby project!", className="text-white")])], className="space-y-4"),
+
+    # Result
+    html.Div(
+        [html.Div(id="picture",
+                  className="object-contain drop-shadow-[0_8px_5px_rgba(34,197,94,0.1)]")
+         ], className="h-screen"),
+    dcc.Store(id="search_uriresult")
+], className="grid grid-cols-2 w-screen h-fit bg-neutral-900 p-4")
 
 
 sp = spotipy.Spotify(
@@ -73,11 +116,11 @@ sp = spotipy.Spotify(
                State("search_by", "value"),
                State("search_type", "value"),
                State("search_uri", "value"),
-               State("search_general","value"),
+               State("search_general", "value"),
                Input('search-trigger', 'n_clicks'),
-               
+
                prevent_initial_call=True)
-def search(search_by, search_type, search_uri,search_general, n_clicks,):
+def search(search_by, search_type, search_uri, search_general, n_clicks,):
 
     if search_by == "uri":
         if search_uri is not None:
@@ -86,7 +129,7 @@ def search(search_by, search_type, search_uri,search_general, n_clicks,):
             return html.Div()
 
     elif search_by == "metadata":
-        if search_type is None or search_general is None:
+        if search_general is None:
             return html.Div()
 
         results = sp.search(q=search_general, limit=1, type=search_type)
@@ -97,6 +140,9 @@ def search(search_by, search_type, search_uri,search_general, n_clicks,):
         elif search_type == "artist":
             uri = results["artists"]["items"][0]["uri"]
 
+    elif search_by == "url":
+        #re.match(r".*album/([A-Za-z0-9]{22}).*", "https://open.spotify.com/album/6A0PfJD05hLKUNXAmXr7I5?si=hxYYJZwlS-OR5JUY7-_BHw")
+        None
     img = get_art_with_code(uri, sp)
     return html.Img(src=img)
 
