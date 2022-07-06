@@ -10,6 +10,8 @@ colorthief = "^0.2.1"
 opencv-python = "^4.5.5"
 spotipy = "^2.19.0"
 tqdm = "^4.64.0"
+dash = "^2.5.1"
+gunicorn = "^20.1.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
