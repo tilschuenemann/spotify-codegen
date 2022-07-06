@@ -23,8 +23,7 @@ def get_art_with_code(uri: str, sp: spotipy.Spotify):
         results = sp.album(cover_uri)
 
     elif re.match(r"spotify:artist:[A-Za-z0-9]{22}", uri):
-        artist_uri = sp.artist(uri)
-        results = artist_uri["uri"]
+        results = sp.artist(uri)
 
     elif re.match(r"spotify:album:[A-Za-z0-9]{22}", uri):
         results = sp.album(uri)
