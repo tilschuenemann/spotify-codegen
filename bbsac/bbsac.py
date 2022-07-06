@@ -8,6 +8,7 @@ import tqdm
 import argparse
 import io
 import os
+import re
 from urllib.request import urlopen
 
 
