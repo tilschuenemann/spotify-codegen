@@ -15,7 +15,7 @@ def rgb_to_hex(rgb):
     return "%02x%02x%02x" % rgb
 
 
-def get_album_code(uri: str, sp: spotipy.Spotify):
+def get_art_with_code(uri: str, sp: spotipy.Spotify):
     if re.match(r"spotify:track:[A-Za-z0-9]{22}", uri):
         test = sp.track(uri)
         cover_uri = test["album"]["uri"]
@@ -66,7 +66,7 @@ def get_album_code(uri: str, sp: spotipy.Spotify):
     return im
 
 
-def save_album_codes(output_folder: str, album_uris: list[str], sp: spotipy.Spotify):
+def save_art_with_code(output_folder: str, album_uris: list[str], sp: spotipy.Spotify):
     """Generates images for each supplied album_uri that merges
     the album cover and its Spotify code.
 
@@ -78,7 +78,7 @@ def save_album_codes(output_folder: str, album_uris: list[str], sp: spotipy.Spot
         list of album uris
     """
     for album_uri in tqdm.tqdm(album_uris, desc="generating album codes "):
-        im = get_album_code(album_uri, sp)
+        im = get_art_with_code(album_uri, sp)
         filename = album_uri.replace(":", "-")
         im.save(f"{output_folder}/{filename}.png")
 
@@ -144,4 +144,4 @@ if __name__ == "__main__":
             if len(results["items"]) == 0:
                 items = False
 
-    save_album_codes(output_folder, uri_list, sp)
+    save_art_with_code(output_folder, uri_list, sp)

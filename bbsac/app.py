@@ -1,5 +1,5 @@
 from dash import Dash, dcc, html, Input, Output, State
-from bbsac import get_album_code
+from bbsac import get_art_with_code
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from spotipy.oauth2 import SpotifyOAuth
@@ -97,7 +97,7 @@ def search(search_by, search_type, search_uri,search_general, n_clicks,):
         elif search_type == "artist":
             uri = results["artists"]["items"][0]["uri"]
 
-    img = get_album_code(uri, sp)
+    img = get_art_with_code(uri, sp)
     return html.Img(src=img)
 
 
