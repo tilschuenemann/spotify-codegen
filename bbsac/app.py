@@ -1,19 +1,24 @@
 from dash import Dash, dcc, html, Input, Output, State
+
 from bbsac import get_art_with_code
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from spotipy.oauth2 import SpotifyOAuth
 from PIL import Image
-
 from urllib.request import urlopen
 import base64
 import re
 
+
+placeholder = Image.open("assets/katebush.png")
+
 app = Dash("Spotify Art+Code",
-           external_scripts=["https://cdn.tailwindcss.com"])
-
+           external_scripts=["https://cdn.tailwindcss.com", "https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"],
+           assets_folder="assets"           
+           )
+app.config.suppress_callback_exceptions = True
+app.title = "Spotify Art+Code"
 server = app.server
-
 app.index_string = '''
         <!DOCTYPE html>
         <html>
@@ -27,10 +32,12 @@ app.index_string = '''
 
         gtag('config', 'G-FGF24ELJ9L');
         </script>
+
         {%metas%}
         <title>{%title%}</title>
         {%favicon%}
         {%css%}
+
     </head>
     <body>
         {%app_entry%}
@@ -43,94 +50,139 @@ app.index_string = '''
 </html>
 '''
 
-app.layout = html.Div([
-    html.Div([
-        html.H1("Append Album / Artist / Song Art with Spotify Code!",
-                className="text-4xl text-green-500"),
-
-        # Search By
-        html.Div(
-            [html.H1("Search By", className="text-xl text-white"),
-             dcc.Dropdown(
-                id="search_by",
-                options=["metadata", "uri"],
-                value="metadata",
-                clearable=False,
-                className="h-10"),
-             ], className="grid align-center space-y-2 w-64 p-2"),
-
-        # Search By Metadata
-        html.Div(
-            [html.H1("Search by Metadata", className="text-xl text-white"),
-             dcc.Dropdown(id="search_type",
-                          options=["album", "artist", "track"],
-                          value="album",
-                          clearable=False,
-                          className="h-10"),
-             dcc.Input(id="search_general",
-                       type="text",
-                       debounce=True,
-                       placeholder="General Search:",
-                       className="h-10 p-2")
-             ], className="grid align-center space-y-2 w-64 p-2"),
-        # Search by URI
-        html.Div(
-            [html.H1("Search by URI", className="text-xl text-white"),
-             dcc.Input(id="search_uri",
-                       type="text",
-                       debounce=True,
-                       placeholder="Spotify URI",
-                       className="h-10 p-2")
-             ],
-            className="grid align-center space-y-4 w-64 p-2"),
-        html.Div([html.H1("Search by URL",className="text-xl text-white"),
-        dcc.Input(id="search_url",
-                       type="text",
-                       debounce=True,
-                       placeholder="Spotify URL",
-                       className="h-10 p-2")
-                    ],className="grid align-center space-y-4 w-64 p-2"),
-        # Search Button
-        html.Div([
-            html.Button(html.H1('Search!', className="text-xl font-bold"),
-                        id='search-trigger',
-                        n_clicks=0,
-                        className="bg-green-400 rounded-lg h-10 w-64")
-                        ]),
-        html.Div([html.P("This is hobby project!", className="text-white")])], className="space-y-4"),
-
-    # Result
-    html.Div(
-        [html.Div(id="picture",
-                  className="object-contain drop-shadow-[0_8px_5px_rgba(34,197,94,0.1)]")
-         ], className="h-screen"),
-    dcc.Store(id="search_uriresult")
-], className="grid grid-cols-2 w-screen h-fit bg-neutral-900 p-4")
-
 
 sp = spotipy.Spotify(
     client_credentials_manager=SpotifyClientCredentials())
 
+app.layout = html.Div([
+    # Sidebar
+    html.Div([
+        # Content Start
+        html.Div([
+            # Search by
+            html.P("Search by", className="text-xl text-white"),
+                dcc.Dropdown(
+                        id="search_by",
+                        options=["Metadata", "URI", "URL"],
+                        value="Metadata",
+                        clearable=False, 
+                        className="pb-2"),
+            # menu
+            html.Div([
+                html.Div(id="sidebar_metadata"),
+                html.Div(id="sidebar_uri"),
+                html.Div(id="sidebar_url"),
+            
+            ],id="menu_container"),
+            # Search Button
+            html.Button(html.H1('Search!', className="text-xl font-bold"),
+                    id='search-trigger',
+                    n_clicks=0,
+                    className="bg-green-400 rounded-xl w-full h-12"),
+                
+        ],className="grid content-start space-y-2"),
+        # Content End
+        html.Div([
+            html.Div(html.A('Github', className="text-xl text-white font-bold text-center"),
+                    className="grid bg-neutral-900 rounded-lg w-full h-12 items-center"),
+            html.Div(html.A('Buy me a coffee', className="text-xl font-bold text-center"),
+                    className="grid bg-yellow-400 rounded-lg w-full h-12 items-center")
+            
+        ],className="grid content-end space-y-2")
+    ],className="grid w-64 bg-neutral-800 p-4"),
 
-@ app.callback(Output("picture", "children"),
-               State("search_by", "value"),
-               State("search_type", "value"),
-               State("search_uri", "value"),
-               State("search_general", "value"),
-               Input('search-trigger', 'n_clicks'),
+    # Content
+    html.Div([
 
-               prevent_initial_call=True)
-def search(search_by, search_type, search_uri, search_general, n_clicks,):
+        # Title
+        html.P("Spotify Art + Code",className="text-4xl font-semibold text-green-500 text-center"),
+        html.Div([
+            # Result
+            html.Div([
+            html.Img(src=placeholder,className="border-green-500 rounded-md h-96 drop-shadow-[0_20px_20px_rgba(34,197,94,0.33)]")
 
-    if search_by == "uri":
+            ],id="result")
+
+        ],className="flex grow col-span-4 grid place-content-center"),
+        
+
+    ],className="flex flex-col grow bg-neutral-900"),
+    dcc.Store(id="search_uriresult")
+],className="flex bg-neutral-900 w-screen h-screen")
+
+@app.callback(
+               Output("sidebar_metadata", "children"),
+               Output("sidebar_uri", "children"),
+               Output("sidebar_url", "children"),
+    #Output("sidebar_menu","children"),
+    Input("search_by", "value"))
+def load_sidebar(search_by):
+
+    url_visibility = {'display': 'none'}
+    uri_visbility = {'display': 'none'}
+    metadata_visbility = {'display': 'none'}
+
+    if search_by == "Metadata":
+        metadata_visbility = {'display': 'block'}
+    elif search_by == "URI":
+        uri_visbility = {'display': 'block'}
+    elif search_by == "URL":
+        url_visibility = {'display': 'block'}
+
+    metadata = html.Div([
+        dcc.Dropdown(id="search_type",
+                    options=["album", "artist", "track"],
+                    value="track",
+                    clearable=False),
+        dcc.Input(id="search_general",
+                type="text",
+                debounce=True,
+                placeholder="kate bush running up that hill",
+                className="w-full h-10 rounded p-2")
+        ], className="grid",style=metadata_visbility),
+
+    uri = html.Div(
+            [dcc.Input(id="search_uri",
+                       type="text",
+                       debounce=True,
+                       placeholder="Spotify URI",
+                       className="w-full h-10 rounded p-2")
+             ],
+            className="grid", style=uri_visbility)
+
+    # url field
+    url = html.Div(
+            [dcc.Input(id="search_url",
+                       type="text",
+                       debounce=True,
+                       placeholder="Spotify URL",
+                       className="w-full h-10 rounded p-2")
+             ], className="grid", style=url_visibility)
+
+    return metadata,uri,url
+
+@app.callback(Output("result", "children"),
+              State("search_by", "value"),
+              State("search_type", "value"),
+              State("search_uri", "value"),
+              State("search_general", "value"),
+              State("search_url", "value"),
+              Input('search-trigger', 'n_clicks'),
+              prevent_initial_call=True,
+              )
+def search(search_by, search_type, search_uri, search_general, search_url, n_clicks,):
+
+    EMPTY = html.Div()    
+
+    if search_by == "URI":
         if search_uri is not None:
             uri = search_uri
         else:
-            return html.Div()
-
-    elif search_by == "metadata":
+            return EMPTY
+    
+    elif search_by == "Metadata":
         if search_general is None:
-            return html.Div()
+            return EMPTY
 
         results = sp.search(q=search_general, limit=1, type=search_type)
         if search_type == "album":
@@ -140,12 +192,20 @@ def search(search_by, search_type, search_uri, search_general, n_clicks,):
         elif search_type == "artist":
             uri = results["artists"]["items"][0]["uri"]
 
-    elif search_by == "url":
-        #re.match(r".*album/([A-Za-z0-9]{22}).*", "https://open.spotify.com/album/6A0PfJD05hLKUNXAmXr7I5?si=hxYYJZwlS-OR5JUY7-_BHw")
-        None
+    elif search_by == "URL":
+        if search_url is not None and re.match(r".*\.com/(album|artist|track)/[A-Za-z0-9]{22}\?si=.*$", search_url):
+            result = re.search(
+                r".*\.com/(album|artist|track)/([A-Za-z0-9]{22})\?si=.*$", search_url)
+            search_type = result.groups()[0]
+            search_suffix = result.groups()[1]
+            uri = f"spotify:{search_type}:{search_suffix}"
+        else:
+            return EMPTY
+
     img = get_art_with_code(uri, sp)
-    return html.Img(src=img)
+    return html.Img(src=img, className="border-green-500 h-96 drop-shadow-[0_20px_20px_rgba(34,197,94,0.33)]")
 
 
 if __name__ == "__main__":
     app.run_server(debug=True)
+
