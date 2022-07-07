@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "bbsac"
+name = "spotifyartcode"
 version = "0.1.0"
-description = "Bring Back Spotify Album Codes"
+description = "Spotify Art + Code Generator"
 authors = ["schuenemann"]
 
 [tool.poetry.dependencies]
@@ -12,6 +12,9 @@ spotipy = "^2.19.0"
 tqdm = "^4.64.0"
 dash = "^2.5.1"
 gunicorn = "^20.1.0"
+
+[tool.poetry.scripts]
+spotifyartcode = "spotifyartcode.cli.sac:main"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
