@@ -10,7 +10,7 @@ import base64
 import re
 
 
-placeholder = Image.open("assets/katebush.png")
+placeholder = Image.open("bbsac/assets/katebush.png")
 
 app = Dash("Spotify Art+Code",
            external_scripts=["https://cdn.tailwindcss.com", "https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"],
