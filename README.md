@@ -1,17 +1,13 @@
-# bring back spotify album + code
+# Spotify Art + Code Generator
 
 ![preview](preview.png)
 
-Spotify used to display its album art and spotify code in one picture after clicking the kebab menu. This still works on mobile, but not in the web player nor in the desktop version.
+Spotify used to display its album / artist / track art and Spotify code in one picture after clicking the kebab menu. This still works on mobile, but not in the web player nor in the desktop version.
 
-# Usage
+This script generates a merged image of the respective art and code.
 
-```bash
-/bin/python bbsac/bbsac.py -h
-usage: bbsac.py [-h] -u URIS [URIS ...] [-o OUT]
+[A web demo can be found here.](https://spotify-art-code.herokuapp.com/)
 
-options:
-  -h, --help          show this help message and exit
-  -u URIS [URIS ...]  comma separated Spotify album URI(s)
-  -o OUT              path to output folder
-```
+## Intent
+
+This is a hobby project, therefore things break at any time. Use at your own risk.
