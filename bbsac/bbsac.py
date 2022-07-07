@@ -13,10 +13,21 @@ from urllib.request import urlopen
 
 
 def rgb_to_hex(rgb):
+    """Converts rgb value to hex.
+
+    :param rgb: rgb value
+    :returns: hex value of input
+    """
     return "%02x%02x%02x" % rgb
 
 
 def get_art_with_code(uri: str, sp: spotipy.Spotify):
+    """ Generates Spotify Art + Code for a given URI.
+
+    :param uri: Spotify URI
+    :param sp: a spotipy instance
+    :returns: album / track / artist art with Spotify Code 
+    """
     if re.match(r"spotify:track:[A-Za-z0-9]{22}", uri):
         test = sp.track(uri)
         cover_uri = test["album"]["uri"]
@@ -66,20 +77,16 @@ def get_art_with_code(uri: str, sp: spotipy.Spotify):
     return im
 
 
-def save_art_with_code(output_folder: str, album_uris: list[str], sp: spotipy.Spotify):
-    """Generates images for each supplied album_uri that merges
-    the album cover and its Spotify code.
+def save_art_with_code(output_folder: str, uris: list[str], sp: spotipy.Spotify):
+    """Generates and saves Spotify Art + Code for all URIs to output_folder.
 
-    Parameters
-    -------
-    output_folder: str
-        folder to save results in
-    album_uris: str
-        list of album uris
+    :param output_folder: path where results will be saved to
+    :param album_uris: list of spotify URIs
+    :param sp: spotipy instance
     """
-    for album_uri in tqdm.tqdm(album_uris, desc="generating album codes "):
-        im = get_art_with_code(album_uri, sp)
-        filename = album_uri.replace(":", "-")
+    for uri in tqdm.tqdm(uris, desc="generating album codes "):
+        im = get_art_with_code(uri, sp)
+        filename = uri.replace(":", "-")
         im.save(f"{output_folder}/{filename}.png")
 
 
