@@ -1,1 +1,1 @@
-web: gunicorn bbsac.app:server
+web: gunicorn spotifyartcode.app.app:server
