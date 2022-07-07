@@ -1,6 +1,6 @@
 from dash import Dash, dcc, html, Input, Output, State
 
-from bbsac import get_art_with_code
+from bbsac.bbsac import get_art_with_code
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from spotipy.oauth2 import SpotifyOAuth
