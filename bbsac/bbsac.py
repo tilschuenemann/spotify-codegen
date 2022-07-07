@@ -89,8 +89,7 @@ def save_art_with_code(output_folder: str, uris: list[str], sp: spotipy.Spotify)
         filename = uri.replace(":", "-")
         im.save(f"{output_folder}/{filename}.png")
 
-
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
@@ -152,3 +151,6 @@ if __name__ == "__main__":
                 items = False
 
     save_art_with_code(output_folder, uri_list, sp)
+
+if __name__ == "__main__":
+    main()
