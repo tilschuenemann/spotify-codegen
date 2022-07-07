@@ -83,9 +83,11 @@ app.layout = html.Div([
         ],className="grid content-start space-y-2"),
         # Content End
         html.Div([
-            html.Div(html.A('Github', className="text-xl text-white font-bold text-center"),
+            html.Div(html.A('Personal Blog', href="https://tilschuenemann.github.io/",target="_blank",className="text-xl text-white font-bold text-center"),
                     className="grid bg-neutral-900 rounded-lg w-full h-12 items-center"),
-            html.Div(html.A('Buy me a coffee', className="text-xl font-bold text-center"),
+            html.Div(html.A('Project on Github', href="https://github.com/tilschuenemann/bring-back-spotify-album-code",target="_blank",className="text-xl text-white font-bold text-center"),
+                    className="grid bg-neutral-900 rounded-lg w-full h-12 items-center"),
+            html.Div(html.A('Buy me a coffee!', href="https://www.buymeacoffee.com/tilschuenemann", target="_blank",className="text-xl font-bold text-center"),
                     className="grid bg-yellow-400 rounded-lg w-full h-12 items-center")
             
         ],className="grid content-end space-y-2")
