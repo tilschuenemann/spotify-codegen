@@ -97,7 +97,7 @@ app.layout = html.Div([
     html.Div([
 
         # Title
-        html.P("Spotify Art + Code",className="text-4xl font-semibold text-green-500 text-center"),
+        html.P("Spotify Art + Code Generator",className="text-4xl font-semibold text-green-500 text-center"),
         html.Div([
             # Result
             html.Div([
