@@ -89,6 +89,42 @@ def save_art_with_code(output_folder: str, uris: list[str], sp: spotipy.Spotify)
         filename = uri.replace(":", "-")
         im.save(f"{output_folder}/{filename}.png")
 
+def uri_from_query(search_general: str, type: str,sp: spotipy.Spotify()):
+    """
+
+    :param search_term: user input to get an album, track or artist
+    :param type: either "album" "track" or "artist"
+    :param sp: spotipy.Spotify instance
+    :returns: uri for search term or None
+    """
+    # TODO use get?
+    results = sp.search(q=search_general, limit=1, type=search_type)
+    if search_type == "album":
+        uri = results["albums"]["items"][0]["uri"]
+    elif search_type == "track":
+        uri = results["tracks"]["items"][0]["uri"]
+    elif search_type == "artist":
+        uri = results["artists"]["items"][0]["uri"]
+    else:
+        uri = None
+    return uri
+
+def uri_from_url(search_url: str):
+    """
+
+    :param search_url: link from Spotify Share
+    :returns: uri from match or None
+    """
+    if re.match(r".*\.com/(album|artist|track)/[A-Za-z0-9]{22}\?si=.*$", search_url):
+        result = re.search(r".*\.com/(album|artist|track)/([A-Za-z0-9]{22})\?si=.*$", search_url)
+        search_type = result.groups()[0]
+        search_suffix = result.groups()[1]
+        uri = f"spotify:{search_type}:{search_suffix}"
+    else:
+        uri = None
+    return uri
+
+
 def main():
     parser = argparse.ArgumentParser()
 
