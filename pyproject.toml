@@ -18,7 +18,58 @@ spotifyartcode = "spotifyartcode.cli.sac:main"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+pyproject-flake8 = "^0.0.1-alpha.4"
+mypy = "^0.961"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = "True"
+warn_return_any = "True"
+warn_unused_configs = "True"
+strict = "True"
+# TODO add modules explicitly
+
+[tool.flake8]
+max-line-length = 100
+max-complexity = 15
+statistics = "True"
+extend-exclude = "spotifyartcode/app/"
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+isolated_build = true
+envlist = pytest, pflake8, mypy
+
+[testenv]
+deps = pytest >= 3.0.0, <4
+whitelist_externals = poetry
+skip_install = true
+commands =
+    poetry install -v
+
+[testenv:pytest]
+deps = pytest
+skip_install = true
+commands = pytest
+
+[testenv:pflake8]
+deps = pyproject-flake8
+skip_install = true
+commands =
+    pflake8 --version
+    - pflake8
+
+[testenv:mypy]
+deps =
+    mypy
+skip_install = true
+commands =
+    mypy --version
+    - mypy spotify
+
+"""
