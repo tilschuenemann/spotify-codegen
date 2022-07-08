@@ -1,5 +1,6 @@
 from colorthief import ColorThief
 from PIL import Image
+from pyparsing import Opt
 import spotipy
 from spotipy.exceptions import SpotifyException
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -13,7 +14,7 @@ import re
 from urllib.request import urlopen
 
 
-def _rgb_to_hex(rgb):
+def _rgb_to_hex(rgb: tuple[int, int, int]) -> str:
     """Converts rgb value to hex.
 
     :param rgb: rgb value as triple
@@ -22,12 +23,12 @@ def _rgb_to_hex(rgb):
     return "%02x%02x%02x" % rgb
 
 
-def get_art_with_code(uri: str, sp: spotipy.Spotify):
+def get_art_with_code(uri: str, sp: spotipy.Spotify) -> Image:
     """ Generates Spotify Art + Code for a given URI.
 
     :param uri: Spotify URI
     :param sp: a spotipy instance
-    :returns: album / track / artist art with Spotify Code 
+    :returns: album / track / artist art with Spotify Code
     """
     if re.match(r"spotify:track:[A-Za-z0-9]{22}", uri):
         test = sp.track(uri)
@@ -78,7 +79,7 @@ def get_art_with_code(uri: str, sp: spotipy.Spotify):
     return im
 
 
-def save_art_with_code(output_folder: str, uris: list[str], sp: spotipy.Spotify):
+def save_art_with_code(output_folder: str, uris: list[str], sp: spotipy.Spotify) -> None:
     """Generates and saves Spotify Art + Code for all URIs to output_folder.
 
     :param output_folder: path where results will be saved to
@@ -91,7 +92,7 @@ def save_art_with_code(output_folder: str, uris: list[str], sp: spotipy.Spotify)
         im.save(f"{output_folder}/{filename}.png")
 
 
-def uri_from_query(search_term: str, search_type: str, sp: spotipy.Spotify()):
+def uri_from_query(search_term: str, search_type: str, sp: spotipy.Spotify) -> Opt:
     """Queries Spotify using search_term for an artist, album or track URI.
 
     :param search_term: user input to get an album, track or artist
@@ -116,15 +117,15 @@ def uri_from_query(search_term: str, search_type: str, sp: spotipy.Spotify()):
     return uri
 
 
-def uri_from_url(search_url: str):
+def uri_from_url(search_url: str) -> Opt:
     """Returns Spotify URI for an artist / album / track Spotify Share URL.
 
     :param search_url: link from Spotify Share
     :returns: uri from match or None
     """
-    if re.match(r".*\.com/(album|artist|track)/[A-Za-z0-9]{22}\?si=.*$", search_url):
-        result = re.search(
-            r".*\.com/(album|artist|track)/([A-Za-z0-9]{22})\?si=.*$", search_url)
+    result = re.match(r".*\.com/(album|artist|track)/[A-Za-z0-9]{22}\?si=.*$", search_url)
+    if result:
+        re.search(r".*\.com/(album|artist|track)/([A-Za-z0-9]{22})\?si=.*$", search_url)
         search_type = result.groups()[0]
         search_suffix = result.groups()[1]
         uri = f"spotify:{search_type}:{search_suffix}"
@@ -133,7 +134,7 @@ def uri_from_url(search_url: str):
     return uri
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
