@@ -17,9 +17,9 @@ gunicorn = "^20.1.0"
 spotifyartcode = "spotifyartcode.cli.sac:main"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
 pyproject-flake8 = "^0.0.1-alpha.4"
 mypy = "^0.961"
+pytest = "^7.1.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -50,12 +50,12 @@ deps = pytest >= 3.0.0, <4
 whitelist_externals = poetry
 skip_install = true
 commands =
-    poetry install -v
+    poetry install
 
 [testenv:pytest]
-deps = pytest
+deps = pytest >= 3.0.0, <4
 skip_install = true
-commands = pytest
+commands = pytest tests/
 
 [testenv:pflake8]
 deps = pyproject-flake8
@@ -70,6 +70,6 @@ deps =
 skip_install = true
 commands =
     mypy --version
-    - mypy spotify
+    - mypy spotifyartcode
 
 """

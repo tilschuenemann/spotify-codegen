@@ -5,8 +5,8 @@ import spotipy
 def test_uri_from_query():
     sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
     assert uri_from_query("kate bush","artist", sp) == "spotify:artist:1aSxMhuvixZ8h9dK9jIDwL"
-    assert uri_from_query("kate bush hounds of love","album", sp) == "spotify:album:5BWl0bB1q0TqyFmkBEupZy"
-    assert uri_from_query("kate bush running up that hill","track", sp) == "spotify:track:75FEaRjZTKLhTrFGsfMUXR"
+    assert uri_from_query("kate bush hounds of love remaster","album", sp) == "spotify:album:3OYnManu1Nlxnw9OMng7BH"
+    assert uri_from_query("kate bush running up that hill remaster","track", sp) == "spotify:track:29d0nY7TzCoi22XBqDQkiP"
 
 def test_uri_from_query_badinput():
     sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
