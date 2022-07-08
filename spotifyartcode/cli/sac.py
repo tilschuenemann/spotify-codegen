@@ -1,6 +1,7 @@
 from colorthief import ColorThief
 from PIL import Image
 import spotipy
+from spotipy.exceptions import SpotifyException
 from spotipy.oauth2 import SpotifyClientCredentials
 from spotipy.oauth2 import SpotifyOAuth
 import tqdm
@@ -12,11 +13,11 @@ import re
 from urllib.request import urlopen
 
 
-def rgb_to_hex(rgb):
+def _rgb_to_hex(rgb):
     """Converts rgb value to hex.
 
-    :param rgb: rgb value
-    :returns: hex value of input
+    :param rgb: rgb value as triple
+    :returns: hex string
     """
     return "%02x%02x%02x" % rgb
 
@@ -52,7 +53,7 @@ def get_art_with_code(uri: str, sp: spotipy.Spotify):
         cf = ColorThief(file_object)
         dominant_color_rgb = cf.get_color(quality=1)
 
-    dominant_color_hex = rgb_to_hex(dominant_color_rgb)
+    dominant_color_hex = _rgb_to_hex(dominant_color_rgb)
     code_color = (
         "black"
         if (dominant_color_rgb[0] + dominant_color_rgb[1] + dominant_color_rgb[2])
@@ -89,34 +90,41 @@ def save_art_with_code(output_folder: str, uris: list[str], sp: spotipy.Spotify)
         filename = uri.replace(":", "-")
         im.save(f"{output_folder}/{filename}.png")
 
-def uri_from_query(search_general: str, type: str,sp: spotipy.Spotify()):
-    """
+
+def uri_from_query(search_term: str, search_type: str, sp: spotipy.Spotify()):
+    """Queries Spotify using search_term for an artist, album or track URI.
 
     :param search_term: user input to get an album, track or artist
-    :param type: either "album" "track" or "artist"
+    :param search_type: either "album" "track" or "artist"
     :param sp: spotipy.Spotify instance
     :returns: uri for search term or None
     """
-    # TODO use get?
-    results = sp.search(q=search_general, limit=1, type=search_type)
-    if search_type == "album":
-        uri = results["albums"]["items"][0]["uri"]
-    elif search_type == "track":
-        uri = results["tracks"]["items"][0]["uri"]
-    elif search_type == "artist":
-        uri = results["artists"]["items"][0]["uri"]
-    else:
+    try:
+        results = sp.search(q=search_term, limit=1, type=search_type)
+        if search_type == "album":
+            uri = results["albums"]["items"][0]["uri"]
+        elif search_type == "track":
+            uri = results["tracks"]["items"][0]["uri"]
+        elif search_type == "artist":
+            uri = results["artists"]["items"][0]["uri"]
+        else:
+            uri = None
+    except IndexError:
+        uri = None
+    except SpotifyException:
         uri = None
     return uri
 
+
 def uri_from_url(search_url: str):
-    """
+    """Returns Spotify URI for an artist / album / track Spotify Share URL.
 
     :param search_url: link from Spotify Share
     :returns: uri from match or None
     """
     if re.match(r".*\.com/(album|artist|track)/[A-Za-z0-9]{22}\?si=.*$", search_url):
-        result = re.search(r".*\.com/(album|artist|track)/([A-Za-z0-9]{22})\?si=.*$", search_url)
+        result = re.search(
+            r".*\.com/(album|artist|track)/([A-Za-z0-9]{22})\?si=.*$", search_url)
         search_type = result.groups()[0]
         search_suffix = result.groups()[1]
         uri = f"spotify:{search_type}:{search_suffix}"
@@ -187,6 +195,7 @@ def main():
                 items = False
 
     save_art_with_code(output_folder, uri_list, sp)
+
 
 if __name__ == "__main__":
     main()
