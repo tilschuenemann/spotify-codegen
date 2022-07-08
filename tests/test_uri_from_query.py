@@ -10,8 +10,8 @@ def test_uri_from_query():
 
 def test_uri_from_query_badinput():
     sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
-    assert uri_from_query("abcdefgasdfasfasf","track", sp) == None
+    assert uri_from_query("abcdefgasdfasfasf","track", sp) is None
 
 def test_uri_from_query_blankinput():
     sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
-    assert uri_from_query("","track", sp) == None
+    assert uri_from_query("","track", sp) is None

@@ -6,7 +6,7 @@ def test_uri_from_url():
     assert uri_from_url("https://open.spotify.com/track/75FEaRjZTKLhTrFGsfMUXR?si=c856ab1d654b4141") == "spotify:track:75FEaRjZTKLhTrFGsfMUXR"
     
 def test_uri_from_url_bad_input():
-    assert uri_from_url("abcdefgh") == None
+    assert uri_from_url("abcdefgh") is None
 
 def test_uri_from_url_blank_input():
-    assert uri_from_url("") == None
+    assert uri_from_url("") is None

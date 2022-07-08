@@ -10,9 +10,9 @@ def test_get_art_with_code():
     img_album = get_art_with_code("spotify:album:5BWl0bB1q0TqyFmkBEupZy",sp)
     img_track = get_art_with_code("spotify:track:75FEaRjZTKLhTrFGsfMUXR",sp)
 
-    exp_img_artist = Image.open(u"tests\spotify-artist-1aSxMhuvixZ8h9dK9jIDwL.png")
-    exp_img_album = Image.open(u"tests\spotify-album-5BWl0bB1q0TqyFmkBEupZy.png")
-    exp_img_track = Image.open(u"tests\spotify-track-75FEaRjZTKLhTrFGsfMUXR.png")
+    exp_img_artist = Image.open("tests\\spotify-artist-1aSxMhuvixZ8h9dK9jIDwL.png")
+    exp_img_album = Image.open("tests\\spotify-album-5BWl0bB1q0TqyFmkBEupZy.png")
+    exp_img_track = Image.open("tests\\spotify-track-75FEaRjZTKLhTrFGsfMUXR.png")
 
     diff_artist = ImageChops.difference(img_artist, exp_img_artist)
     diff_album = ImageChops.difference(img_album, exp_img_album)

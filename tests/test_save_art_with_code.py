@@ -23,7 +23,7 @@ def test_save_art_with_code(tmp_path):
 
     # check for correct image
     img_artist = Image.open(output_folder_contents[0])
-    exp_img_artist = Image.open("tests\spotify-artist-1aSxMhuvixZ8h9dK9jIDwL.png")
+    exp_img_artist = Image.open("tests\\spotify-artist-1aSxMhuvixZ8h9dK9jIDwL.png")
     diff_artist = ImageChops.difference(img_artist, exp_img_artist)
     assert diff_artist.getbbox() is None
 
