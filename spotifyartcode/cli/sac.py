@@ -30,17 +30,21 @@ def get_art_with_code(uri: str, sp: spotipy.Spotify) -> Image:
     :param sp: a spotipy instance
     :returns: album / track / artist art with Spotify Code
     """
-    if re.match(r"spotify:track:[A-Za-z0-9]{22}", uri):
-        test = sp.track(uri)
-        cover_uri = test["album"]["uri"]
-        results = sp.album(cover_uri)
 
-    elif re.match(r"spotify:artist:[A-Za-z0-9]{22}", uri):
-        results = sp.artist(uri)
+    try:
+        if re.match(r"spotify:track:[A-Za-z0-9]{22}", uri):
+            test = sp.track(uri)
+            cover_uri = test["album"]["uri"]
+            results = sp.album(cover_uri)
 
-    elif re.match(r"spotify:album:[A-Za-z0-9]{22}", uri):
-        results = sp.album(uri)
-    else:
+        elif re.match(r"spotify:artist:[A-Za-z0-9]{22}", uri):
+            results = sp.artist(uri)
+
+        elif re.match(r"spotify:album:[A-Za-z0-9]{22}", uri):
+            results = sp.album(uri)
+        else:
+            return None
+    except SpotifyException:
         return None
 
     link_to_cover = results["images"][0]["url"]
@@ -125,9 +129,9 @@ def uri_from_url(search_url: str) -> Opt:
     """
     result = re.match(r".*\.com/(album|artist|track)/[A-Za-z0-9]{22}\?si=.*$", search_url)
     if result:
-        re.search(r".*\.com/(album|artist|track)/([A-Za-z0-9]{22})\?si=.*$", search_url)
-        search_type = result.groups()[0]
-        search_suffix = result.groups()[1]
+        result = re.search(r".*\.com/(?P<search_type>album|artist|track)/(?P<uri>[A-Za-z0-9]{22})\?si=.*$", search_url)
+        search_type = result.group("search_type")
+        search_suffix = result.group("uri")
         uri = f"spotify:{search_type}:{search_suffix}"
     else:
         uri = None
