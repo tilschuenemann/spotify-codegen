@@ -1,6 +1,6 @@
 from dash import Dash, dcc, html, Input, Output, State
 
-from spotifyartcode.cli.sac import get_art_with_code
+from spotifyartcode.cli.sac import *
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from spotipy.oauth2 import SpotifyOAuth
@@ -177,33 +177,15 @@ def search(search_by, search_type, search_uri, search_general, search_url, n_cli
     EMPTY = html.Div()    
 
     if search_by == "URI":
-        if search_uri is not None:
             uri = search_uri
-        else:
-            return EMPTY
-    
     elif search_by == "Metadata":
-        if search_general is None:
-            return EMPTY
-
-        results = sp.search(q=search_general, limit=1, type=search_type)
-        if search_type == "album":
-            uri = results["albums"]["items"][0]["uri"]
-        elif search_type == "track":
-            uri = results["tracks"]["items"][0]["uri"]
-        elif search_type == "artist":
-            uri = results["artists"]["items"][0]["uri"]
-
+        uri = uri_from_query(search_general, search_type, sp)
     elif search_by == "URL":
-        if search_url is not None and re.match(r".*\.com/(album|artist|track)/[A-Za-z0-9]{22}\?si=.*$", search_url):
-            result = re.search(
-                r".*\.com/(album|artist|track)/([A-Za-z0-9]{22})\?si=.*$", search_url)
-            search_type = result.groups()[0]
-            search_suffix = result.groups()[1]
-            uri = f"spotify:{search_type}:{search_suffix}"
-        else:
-            return EMPTY
+        uri = uri_from_url(search_url)
 
+    if uri is None:
+        return EMPTY
+        
     img = get_art_with_code(uri, sp)
     return html.Img(src=img, className="border-green-500 h-96 drop-shadow-[0_20px_20px_rgba(34,197,94,0.33)]")
 

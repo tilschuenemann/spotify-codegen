@@ -138,7 +138,7 @@ def uri_from_url(search_url: str) -> Opt:
     return uri
 
 
-def main() -> None:
+def main(argv=None) -> None:
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
@@ -161,7 +161,7 @@ def main() -> None:
         required=False,
         help="flag for fetching all albums in your music library")
 
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     # add current folder as fallback output folder
     if args.out is None:

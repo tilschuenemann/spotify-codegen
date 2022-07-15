@@ -12,6 +12,7 @@ spotipy = "^2.19.0"
 tqdm = "^4.64.0"
 dash = "^2.5.1"
 gunicorn = "^20.1.0"
+coverage = "^6.4.1"
 
 [tool.poetry.scripts]
 spotifyartcode = "spotifyartcode.cli.sac:main"

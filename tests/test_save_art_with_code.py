@@ -6,7 +6,6 @@ from PIL import ImageChops
 
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
-
 def test_save_art_with_code(tmp_path):
     # create empty output dir
     d = tmp_path / "output"
