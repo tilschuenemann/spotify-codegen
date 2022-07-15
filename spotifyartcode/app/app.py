@@ -191,5 +191,5 @@ def search(search_by, search_type, search_uri, search_general, search_url, n_cli
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=False)
 
