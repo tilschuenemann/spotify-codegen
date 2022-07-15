@@ -13,6 +13,7 @@ tqdm = "^4.64.0"
 dash = "^2.5.1"
 gunicorn = "^20.1.0"
 coverage = "^6.4.1"
+pyparsing = "^3.0.9"
 
 [tool.poetry.scripts]
 spotifyartcode = "spotifyartcode.cli.sac:main"
