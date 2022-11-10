@@ -1,7 +1,6 @@
 .cache
-__pycache__
-.mypy_cache_
-.pytest_cache
-.tox
-htmlcov
 .coverage
+.pytest_cache
+sandbox*
+__pycache__*
+htmlcov*

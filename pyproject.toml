@@ -1,77 +1,43 @@
 [tool.poetry]
-name = "spotifyartcode"
+name = "spotifycodegen"
 version = "0.1.0"
-description = "Spotify Art + Code Generator"
+description = ""
 authors = ["schuenemann"]
+readme = "README.md"
+
+[tool.poetry.scripts]
+scg = "spotifycodegen.cli:main"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+spotipy = "^2.21.0"
+pillow = "^9.3.0"
 colorthief = "^0.2.1"
-opencv-python = "^4.5.5"
-spotipy = "^2.19.0"
-tqdm = "^4.64.0"
-dash = "^2.5.1"
-gunicorn = "^20.1.0"
-coverage = "^6.4.1"
-pyparsing = "^3.0.9"
+tqdm = "^4.64.1"
 
-[tool.poetry.scripts]
-spotifyartcode = "spotifyartcode.cli.sac:main"
+[tool.poetry.group.dev.dependencies]
+black = "^22.10.0"
+coverage = "^6.5.0"
+mypy = "^0.990"
 
-[tool.poetry.dev-dependencies]
-pyproject-flake8 = "^0.0.1-alpha.4"
-mypy = "^0.961"
-pytest = "^7.1.2"
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+[tool.black]
+line-length=120
+target-version = ['py310']
 
 [tool.mypy]
-python_version = "3.10"
-ignore_missing_imports = "True"
-warn_return_any = "True"
-warn_unused_configs = "True"
-strict = "True"
-# TODO add modules explicitly
+mypy_path = "spotifycodegen/"
+check_untyped_defs = true
+disallow_any_generics = true
+ignore_missing_imports = true
+no_implicit_optional = true
+show_error_codes = true
+strict_equality = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_configs = true
 
-[tool.flake8]
-max-line-length = 100
-max-complexity = 15
-statistics = "True"
-extend-exclude = "spotifyartcode/app/"
 
-[tool.tox]
-legacy_tox_ini = """
-[tox]
-isolated_build = true
-envlist = pytest, pflake8, mypy
-
-[testenv]
-deps = pytest >= 3.0.0, <4
-whitelist_externals = poetry
-skip_install = true
-commands =
-    poetry install
-
-[testenv:pytest]
-deps = pytest >= 3.0.0, <4
-skip_install = true
-commands = pytest tests/
-
-[testenv:pflake8]
-deps = pyproject-flake8
-skip_install = true
-commands =
-    pflake8 --version
-    - pflake8
-
-[testenv:mypy]
-deps =
-    mypy
-skip_install = true
-commands =
-    mypy --version
-    - mypy spotifyartcode
-
-"""
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,1 +1,0 @@
-web: gunicorn spotifyartcode.app.app:server
