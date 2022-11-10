@@ -1,3 +1,5 @@
+![Test Badge](https://github.com/tilschuenemann/spotifycodegen/actions/workflows/CICD.yml/badge.svg)
+
 # spotify codegen
 
 ![Preview](preview.png)
@@ -7,9 +9,12 @@ package mimicks that behaviour and creates stitches, based on supplied
 
 - URL
 - URI
-- a query
+- query
 
-It's also possible to use create stitches for all saved albums and 50 followed artists (limit imposed by Spotify API).
+It's also possible to use create stitches for:
+
+- all saved albums
+- 50 followed artists (limit imposed by Spotify API)
 
 ## Installation
 
@@ -29,7 +34,7 @@ export SPOTIPY_CLIENT_SECRET="yoursecret"
 All CLI capabilities are listed here:
 
 ```bash
-scg -h                                                                                                                                22-11-10  9:39PM
+scg -h
 usage: scg [-h] [--output_dir OUTPUT_DIR]
            (--url_list [URL_LIST ...] | --uri_list [URI_LIST ...] | --track [TRACK] | --album [ALBUM] | --artist [ARTIST] | --saved-albums | --followed-artists)
 
