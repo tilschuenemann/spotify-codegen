@@ -1,9 +1,19 @@
 [tool.poetry]
 name = "spotifycodegen"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["schuenemann"]
 readme = "README.md"
+repository = "https://github.com/tilschuenemann/spotifycodegen"
+keywords = ["spotify","cover","art","spotify-api","scan","uri","url","query","spotipy","code"]
+classifiers = ["Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11"]
 
 [tool.poetry.scripts]
 scg = "spotifycodegen.cli:main"
