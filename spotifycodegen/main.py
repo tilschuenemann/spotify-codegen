@@ -14,10 +14,10 @@ from typing import List
 
 
 class spotifycodegen:
-    def __init__(self, output_dir: pathlib.Path | None = None, scopes: List[str] | None = None):
+    def __init__(self, output_dir: pathlib.Path | None = None, scopes: List[str] = []):
         self.scopes = scopes
 
-        if scopes is None:
+        if len(scopes) == 0:
             auth_manager = SpotifyClientCredentials()
             self.sp = spotipy.Spotify(auth_manager=auth_manager)
         else:
@@ -37,12 +37,12 @@ class spotifycodegen:
 
     def gen_codes_urls(self, urls: List[str]) -> None:
         uris = [self._url_to_uri(x) for x in urls]
-        # filter out none
+        uris = [x for x in uris if x is not None]
         self.gen_codes_uris(uris)
 
     def gen_codes_query(self, query: str, search_type: str) -> None:
         if search_type not in ["track", "album", "artist"]:
-            exit("supplied search_type is not supplied. please use one of: track, album, artist")
+            exit("supplied search_type is not supported. please use one of: track, album, artist")
         uri = self._query_to_uri(query, search_type)
         self.gen_codes_uris([uri])
 
@@ -51,7 +51,7 @@ class spotifycodegen:
         self.gen_codes_uris(uri_list)
 
     def gen_codes_followed_artists(self) -> None:
-        uri_list = self._get_50_artist_uris()()
+        uri_list = self._get_50_artist_uris()
         self.gen_codes_uris(uri_list)
 
     def _url_to_uri(self, search_url: str) -> str | None:
@@ -79,19 +79,16 @@ class spotifycodegen:
         return uri
 
     def _generate_code(self, uri: str) -> Image:
-        try:
-            if re.match(r"spotify:track:[A-Za-z0-9]{22}", uri):
-                track = self.sp.track(uri)
-                album_uri = track["album"]["uri"]
-                results = self.sp.album(album_uri)
-            elif re.match(r"spotify:artist:[A-Za-z0-9]{22}", uri):
-                results = self.sp.artist(uri)
-            elif re.match(r"spotify:album:[A-Za-z0-9]{22}", uri):
-                results = self.sp.album(uri)
-            else:
-                exit("supplied uri doesn't match artist, album or track pattern!")
-        except:
-            exit("an error occured!")
+        if re.match(r"spotify:track:[A-Za-z0-9]{22}", uri):
+            track = self.sp.track(uri)
+            album_uri = track["album"]["uri"]
+            results = self.sp.album(album_uri)
+        elif re.match(r"spotify:artist:[A-Za-z0-9]{22}", uri):
+            results = self.sp.artist(uri)
+        elif re.match(r"spotify:album:[A-Za-z0-9]{22}", uri):
+            results = self.sp.album(uri)
+        else:
+            exit("supplied uri doesn't match artist, album or track pattern!")
 
         link_to_cover = results["images"][0]["url"]
         cover_size = results["images"][0]["height"]

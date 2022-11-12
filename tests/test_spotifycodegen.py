@@ -68,3 +68,51 @@ def test_generate_codes(output_dir, track_uri, album_uri, artist_uri):
     for fname in fname_list:
         tmp_path = output_dir / fname
         assert tmp_path.exists()
+
+
+def test_exceptions(output_dir):
+    scg = spotifycodegen(output_dir=output_dir)
+
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        scg._get_saved_album_uris()
+    assert pytest_wrapped_e.type == SystemExit
+    assert pytest_wrapped_e.value.code == "the following scopes need to be set: user-library-read"
+
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        scg._get_50_artist_uris()
+    assert pytest_wrapped_e.type == SystemExit
+    assert pytest_wrapped_e.value.code == "the following scopes need to be set: user-follow-read"
+
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        scg._generate_code("baduripattern")
+    assert pytest_wrapped_e.type == SystemExit
+    assert pytest_wrapped_e.value.code == "supplied uri doesn't match artist, album or track pattern!"
+
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        scg.gen_codes_query(query="query", search_type="badsearchtype")
+    assert pytest_wrapped_e.type == SystemExit
+    assert (
+        pytest_wrapped_e.value.code == "supplied search_type is not supported. please use one of: track, album, artist"
+    )
+
+
+def test_gen_codes_urls(output_dir, track_url, album_url, artist_url):
+    url_list = [track_url, album_url, artist_url]
+
+    scg = spotifycodegen(output_dir=output_dir)
+    scg.gen_codes_urls(url_list)
+
+    i = 0
+    for file in output_dir.iterdir():
+        i += 1
+    assert i == 3
+
+
+def test_gen_codes_query(output_dir):
+    scg = spotifycodegen(output_dir=output_dir)
+    scg.gen_codes_query("duster", "artist")
+
+    i = 0
+    for file in output_dir.iterdir():
+        i += 1
+    assert i == 1
