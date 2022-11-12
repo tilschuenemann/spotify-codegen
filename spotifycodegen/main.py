@@ -28,8 +28,19 @@ class spotifycodegen:
         else:
             self.OUTPUT_DIR = output_dir
 
+    def __check_query(self, search_term: str, search_type: str) -> bool:
+        if not (search_term and search_term.strip()):
+            raise Exception("please provide a valid search term!")
+            return True
+        elif search_type not in ["artist", "album", "track"]:
+            raise Exception("please provide a correct search type: artist, album, track!")
+            return True
+        return False
+
     def gen_codes_uris(self, uris: List[str]):
         for uri in tqdm.tqdm(uris):
+            if uri is None:
+                continue
             im = self._generate_code(uri)
             if im is not None:
                 fname = uri.replace(":", "-") + ".png"
@@ -37,12 +48,11 @@ class spotifycodegen:
 
     def gen_codes_urls(self, urls: List[str]) -> None:
         uris = [self._url_to_uri(x) for x in urls]
-        uris = [x for x in uris if x is not None]
         self.gen_codes_uris(uris)
 
     def gen_codes_query(self, query: str, search_type: str) -> None:
-        if search_type not in ["track", "album", "artist"]:
-            exit("supplied search_type is not supported. please use one of: track, album, artist")
+        if self.__check_query(query, search_type):
+            return None
         uri = self._query_to_uri(query, search_type)
         self.gen_codes_uris([uri])
 
@@ -70,6 +80,9 @@ class spotifycodegen:
         return uri
 
     def _query_to_uri(self, search_term: str, search_type: str) -> str | None:
+        if self.__check_query(search_term, search_type):
+            return None
+
         try:
             results = self.sp.search(q=search_term, limit=1, type=search_type)
             uri = results[f"{search_type}s"]["items"][0]["uri"]
@@ -78,7 +91,7 @@ class spotifycodegen:
             print(f"couldn't find a matching {search_type}: {search_term}")
         return uri
 
-    def _generate_code(self, uri: str) -> Image:
+    def _generate_code(self, uri: str) -> Image.Image | None:
         if re.match(r"spotify:track:[A-Za-z0-9]{22}", uri):
             track = self.sp.track(uri)
             album_uri = track["album"]["uri"]
@@ -88,7 +101,8 @@ class spotifycodegen:
         elif re.match(r"spotify:album:[A-Za-z0-9]{22}", uri):
             results = self.sp.album(uri)
         else:
-            exit("supplied uri doesn't match artist, album or track pattern!")
+            raise Exception("supplied uri doesn't match artist, album or track pattern!")
+            return None
 
         link_to_cover = results["images"][0]["url"]
         cover_size = results["images"][0]["height"]
@@ -116,7 +130,8 @@ class spotifycodegen:
 
     def _get_saved_album_uris(self) -> List[str]:
         if "user-library-read" not in self.scopes:
-            exit("the following scopes need to be set: user-library-read")
+            raise Exception("the following scopes need to be set: user-library-read")
+            return []
         items = True
         offset = 0
         uri_list = []
@@ -131,7 +146,8 @@ class spotifycodegen:
 
     def _get_50_artist_uris(self) -> List[str]:
         if "user-follow-read" not in self.scopes:
-            exit("the following scopes need to be set: user-follow-read")
+            raise Exception("the following scopes need to be set: user-follow-read")
+            return []
         uri_list = []
         results = self.sp.current_user_followed_artists(limit=50)
         for artist in results["artists"]["items"]:
