@@ -1,4 +1,5 @@
 ![Test Badge](https://github.com/tilschuenemann/spotifycodegen/actions/workflows/CICD.yml/badge.svg)
+[![codecov](https://codecov.io/gh/tilschuenemann/spotifycodegen/branch/main/graph/badge.svg?token=WJ2OBJ3ZJV)](https://codecov.io/gh/tilschuenemann/spotifycodegen)
 
 # spotify codegen
 
