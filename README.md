@@ -1,5 +1,6 @@
 ![Test Badge](https://github.com/tilschuenemann/spotifycodegen/actions/workflows/CICD.yml/badge.svg)
 [![codecov](https://codecov.io/gh/tilschuenemann/spotifycodegen/branch/main/graph/badge.svg?token=WJ2OBJ3ZJV)](https://codecov.io/gh/tilschuenemann/spotifycodegen)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://tilschuenemann-showcase-showcases0-about-ko9pvy.streamlit.app/spotify_codegen)
 
 # spotify codegen
 
@@ -16,6 +17,8 @@ It's also possible to use create stitches for:
 
 - all saved albums
 - 50 followed artists (limit imposed by Spotify API)
+
+[You can find a showcase here](https://tilschuenemann-showcase-showcases0-about-ko9pvy.streamlit.app/spotify_codegen)
 
 ## Installation
 
