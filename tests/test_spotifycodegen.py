@@ -28,19 +28,13 @@ def track_uri() -> str:
 @pytest.fixture
 def artist_url() -> str:
     """Pytest fixture for artist url."""
-    return "".join(
-        "https://open.spotify.com/artist/",
-        "5AyEXCtu3xnnsTGCo4RVZh?si=Zu-zX5YTQHW97PaDbVY_Eg",
-    )
+    return "https://open.spotify.com/artist/5AyEXCtu3xnnsTGCo4RVZh?si=Zu-zX5YTQHW97PaDbVY_Eg"
 
 
 @pytest.fixture
 def album_url() -> str:
     """Pytest fixture for album url."""
-    return "".join(
-        "https://open.spotify.com/album/",
-        "2S3289mypNw2zP0OpFexMb?si=pl3A3Y5bQUmqZFmUGWTLJw",
-    )
+    return "https://open.spotify.com/album/2S3289mypNw2zP0OpFexMb?si=pl3A3Y5bQUmqZFmUGWTLJw"
 
 
 @pytest.fixture

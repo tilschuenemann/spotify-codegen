@@ -182,10 +182,7 @@ class SpotifyCodeGen:
         )
         uri_call = uri.replace(":", "%3A")
 
-        url = "".join(
-            f"https://www.spotifycodes.com/downloadCode.php?uri=png%2F{dominant_color_hex}",
-            f"%2F{code_color}%2F{cover_size}%2F{uri_call}",
-        )
+        url = f"https://www.spotifycodes.com/downloadCode.php?uri=png%2F{dominant_color_hex}%2F{code_color}%2F{cover_size}%2F{uri_call}"  # noqa
         album_code = Image.open(urlopen(url))  # noqa:S310
 
         final_height = album_code.size[1] + cover_size
