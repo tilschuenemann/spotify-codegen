@@ -1,58 +1,73 @@
-![Test Badge](https://github.com/tilschuenemann/spotifycodegen/actions/workflows/CICD.yml/badge.svg)
-[![codecov](https://codecov.io/gh/tilschuenemann/spotifycodegen/branch/main/graph/badge.svg?token=WJ2OBJ3ZJV)](https://codecov.io/gh/tilschuenemann/spotifycodegen)
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://tilschuenemann-showcase-showcases0-about-ko9pvy.streamlit.app/spotify_codegen)
+# spotify-codegen
 
-# spotify codegen
+[![PyPI](https://img.shields.io/pypi/v/spotify-codegen.svg)][pypi_]
+[![Status](https://img.shields.io/pypi/status/spotify-codegen.svg)][status]
+[![Python Version](https://img.shields.io/pypi/pyversions/spotify-codegen)][python version]
+[![License](https://img.shields.io/pypi/l/spotify-codegen)][license]
 
-![Preview](preview.png)
+[![Read the documentation at https://spotify-codegen.readthedocs.io/](https://img.shields.io/readthedocs/spotify-codegen/latest.svg?label=Read%20the%20Docs)][read the docs]
+[![Tests](https://github.com/tilschuenemann/spotify-codegen/workflows/Tests/badge.svg)][tests]
+[![Codecov](https://codecov.io/gh/tilschuenemann/spotify-codegen/branch/main/graph/badge.svg)][codecov]
 
-Spotify removed the feature to get a stitched image of an album / artist / track cover with their own [Spotify Code](https://www.spotifycodes.com/). This
-package mimicks that behaviour and creates stitches, based on supplied
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)][pre-commit]
+[![Black](https://img.shields.io/badge/code%20style-black-000000.svg)][black]
 
-- URL
-- URI
-- query
+[pypi_]: https://pypi.org/project/spotify-codegen/
+[status]: https://pypi.org/project/spotify-codegen/
+[python version]: https://pypi.org/project/spotify-codegen
+[read the docs]: https://spotify-codegen.readthedocs.io/
+[tests]: https://github.com/tilschuenemann/spotify-codegen/actions?workflow=Tests
+[codecov]: https://app.codecov.io/gh/tilschuenemann/spotify-codegen
+[pre-commit]: https://github.com/pre-commit/pre-commit
+[black]: https://github.com/psf/black
 
-It's also possible to use create stitches for:
+## Features
 
-- all saved albums
-- 50 followed artists (limit imposed by Spotify API)
+- TODO
 
-[You can find a showcase here](https://tilschuenemann-showcase-showcases0-about-ko9pvy.streamlit.app/spotify_codegen)
+## Requirements
+
+- TODO
 
 ## Installation
 
-```bash
-pip install spotifycodegen
+You can install _spotify-codegen_ via [pip] from [PyPI]:
+
+```console
+$ pip install spotify-codegen
 ```
 
 ## Usage
 
-`spotifycodegen` uses the Spotify API, there for you need to supply a Spotify Client ID & Token as environment variables:
+Please see the [Command-line Reference] for details.
 
-```bash
-export SPOTIPY_CLIENT_ID="yourid"
-export SPOTIPY_CLIENT_SECRET="yoursecret"
-```
+## Contributing
 
-All CLI capabilities are listed here:
+Contributions are very welcome.
+To learn more, see the [Contributor Guide].
 
-```bash
-scg -h
-usage: scg [-h] [--output_dir OUTPUT_DIR]
-           (--url_list [URL_LIST ...] | --uri_list [URI_LIST ...] | --track [TRACK] | --album [ALBUM] | --artist [ARTIST] | --saved-albums | --followed-artists)
+## License
 
-options:
-  -h, --help            show this help message and exit
-  --output_dir OUTPUT_DIR
-                        output directory, defaults to current directory.
-  --url_list [URL_LIST ...]
-                        generates code with cover for list of URLs.
-  --uri_list [URI_LIST ...]
-                        generates code with cover for list of URIs.
-  --track [TRACK]       generates code with tracks album cover.
-  --album [ALBUM]       generates code with album cover.
-  --artist [ARTIST]     generates code with artist cover.
-  --saved-albums        Generates code with album for all saved albums. Requires OAuth login.
-  --followed-artists    Generates code with artist cover for 50 followed artists. Requires OAuth login.
-```
+Distributed under the terms of the [MIT license][license],
+_spotify-codegen_ is free and open source software.
+
+## Issues
+
+If you encounter any problems,
+please [file an issue] along with a detailed description.
+
+## Credits
+
+This project was generated from [@cjolowicz]'s [Hypermodern Python Cookiecutter] template.
+
+[@cjolowicz]: https://github.com/cjolowicz
+[pypi]: https://pypi.org/
+[hypermodern python cookiecutter]: https://github.com/cjolowicz/cookiecutter-hypermodern-python
+[file an issue]: https://github.com/tilschuenemann/spotify-codegen/issues
+[pip]: https://pip.pypa.io/
+
+<!-- github-only -->
+
+[license]: https://github.com/tilschuenemann/spotify-codegen/blob/main/LICENSE
+[contributor guide]: https://github.com/tilschuenemann/spotify-codegen/blob/main/CONTRIBUTING.md
+[command-line reference]: https://spotify-codegen.readthedocs.io/en/latest/usage.html

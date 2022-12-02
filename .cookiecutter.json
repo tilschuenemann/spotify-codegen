@@ -1,0 +1,13 @@
+{
+  "_template": "gh:cjolowicz/cookiecutter-hypermodern-python",
+  "author": "Til Sch\u00fcnemann",
+  "copyright_year": "2022",
+  "development_status": "Development Status :: 3 - Alpha",
+  "email": "  ",
+  "friendly_name": "spotify-codegen",
+  "github_user": "tilschuenemann",
+  "license": "MIT",
+  "package_name": "spotifycodegen",
+  "project_name": "spotify-codegen",
+  "version": "0.0.0"
+}
