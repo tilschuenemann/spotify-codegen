@@ -25,6 +25,8 @@ jobs:
     env:
       NOXSESSION: ${{ matrix.session }}
       FORCE_COLOR: "1"
+      SPOTIPY_CLIENT_ID: ${{ secrets.SPOTIPY_CLIENT_ID }}
+      SPOTIPY_CLIENT_SECRET: ${{ secrets.SPOTIPY_CLIENT_SECRET }}
       PRE_COMMIT_COLOR: "always"
 
     steps:
