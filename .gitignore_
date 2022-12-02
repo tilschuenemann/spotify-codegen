@@ -1,7 +1,0 @@
-.cache
-.coverage
-.pytest_cache
-sandbox*
-__pycache__*
-htmlcov*
-dist*
