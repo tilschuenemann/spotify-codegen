@@ -1,34 +1,42 @@
-from colorthief import ColorThief
-from PIL import Image
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
-import tqdm
-
+"""SpotifyCodeGen."""
 import io
 import os
 import pathlib
 import re
-import requests
+from typing import List
 from urllib.request import urlopen
-from typing import List, Optional
+
+import spotipy
+import tqdm
+from colorthief import ColorThief
+from PIL import Image
+from spotipy.oauth2 import SpotifyClientCredentials
+from spotipy.oauth2 import SpotifyOAuth
 
 
-class spotifycodegen:
-    def __init__(self, output_dir: pathlib.Path | None = None, scopes: List[str] = []):
+class SpotifyCodeGen:
+    """Spotify Codegenerator."""
+
+    def __init__(
+        self, output_dir: pathlib.Path | None = None, scopes: List[str] | None = None
+    ):
         """Initializes Spotify Code-Generator.
 
         Args:
           output_dir: directory where generated codes should be written to.
-          scopes: list of OAuth2 scopes to be passed. 
+          scopes: list of OAuth2 scopes to be passed.
         """
         self.scopes = scopes
 
-        if len(scopes) == 0:
+        if scopes is None:
             auth_manager = SpotifyClientCredentials()
             self.sp = spotipy.Spotify(auth_manager=auth_manager)
         else:
-            self.sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
-                scope=scopes, redirect_uri="http://127.0.0.1:9090"))
+            self.sp = spotipy.Spotify(
+                auth_manager=SpotifyOAuth(
+                    scope=scopes, redirect_uri="http://127.0.0.1:9090"
+                )
+            )
 
         if output_dir is None or output_dir.is_dir() is False:
             self.OUTPUT_DIR = pathlib.Path(os.getcwd())
@@ -46,7 +54,8 @@ class spotifycodegen:
             raise Exception("please provide a valid search term!")
         elif search_type not in ["artist", "album", "track"]:
             raise Exception(
-                "please provide a correct search type: artist, album, track!")
+                "please provide a correct search type: artist, album, track!"
+            )
 
     def gen_codes_uris(self, uris: List[str]) -> None:
         """Generates Spotify Codes for given URIs.
@@ -71,15 +80,15 @@ class spotifycodegen:
         uris = [self._url_to_uri(x) for x in urls]
         self.gen_codes_uris(uris)
 
-    def gen_codes_query(self, query: str, search_type: str) -> None:
-        """Generates a Spotify Code for given query and search type.
+    def gen_codes_query(self, search_term: str, search_type: str) -> None:
+        """Generates a Spotify Code for given search_term and search type.
 
         Args:
           search_term: natural language query
           search_type: either 'track', 'artist' or 'album'
         """
-        self.__check_query(query, search_type)
-        uri = self._query_to_uri(query, search_type)
+        self.__check_query(search_term, search_type)
+        uri = self._query_to_uri(search_term, search_type)
         self.gen_codes_uris([uri])
 
     def gen_codes_album_lib(self) -> None:
@@ -99,7 +108,9 @@ class spotifycodegen:
           Exception if extract wasn't found.
         """
         result = re.match(
-            r".*\.com/(?P<search_type>album|artist|track)/(?P<uri>[A-Za-z0-9]{22})\?si=.*$", search_url)
+            r".*\.com/(?P<search_type>album|artist|track)/(?P<uri>[A-Za-z0-9]{22})\?si=.*$",
+            search_url,
+        )
         if result is not None:
             search_type = result.group("search_type")
             search_suffix = result.group("uri")
@@ -123,9 +134,10 @@ class spotifycodegen:
         try:
             results = self.sp.search(q=search_term, limit=1, type=search_type)
             uri = str(results[f"{search_type}s"]["items"][0]["uri"])
-        except:
+        except Exception as exc:
             raise Exception(
-                f"couldn't find a matching {search_type}: {search_term}")
+                f"couldn't find a matching {search_type}: {search_term}"
+            ) from exc
         return uri
 
     def _generate_code(self, uri: str) -> Image.Image:
@@ -148,11 +160,12 @@ class spotifycodegen:
             results = self.sp.album(uri)
         else:
             raise Exception(
-                "supplied uri doesn't match artist, album or track pattern!")
+                "supplied uri doesn't match artist, album or track pattern!"
+            )
 
         link_to_cover = results["images"][0]["url"]
         cover_size = results["images"][0]["height"]
-        cover_image = Image.open(urlopen(link_to_cover))
+        cover_image = Image.open(urlopen(link_to_cover))  # noqa:S310
 
         with io.BytesIO() as file_object:
             cover_image.save(file_object, "PNG")
@@ -161,13 +174,19 @@ class spotifycodegen:
 
         dominant_color_hex = "%02x%02x%02x" % dominant_color_rgb
         code_color = (
-            "black" if (dominant_color_rgb[0] + dominant_color_rgb[1]
-                        + dominant_color_rgb[2]) / 3 > 127 else "white"
+            "black"
+            if (dominant_color_rgb[0] + dominant_color_rgb[1] + dominant_color_rgb[2])
+            / 3
+            > 127
+            else "white"
         )
         uri_call = uri.replace(":", "%3A")
 
-        url = f"https://www.spotifycodes.com/downloadCode.php?uri=png%2F{dominant_color_hex}%2F{code_color}%2F{cover_size}%2F{uri_call}"
-        album_code = Image.open(urlopen(url))
+        url = "".join(
+            f"https://www.spotifycodes.com/downloadCode.php?uri=png%2F{dominant_color_hex}",
+            f"%2F{code_color}%2F{cover_size}%2F{uri_call}",
+        )
+        album_code = Image.open(urlopen(url))  # noqa:S310
 
         final_height = album_code.size[1] + cover_size
         im = Image.new(mode="RGB", size=(cover_size, final_height))
@@ -182,8 +201,7 @@ class spotifycodegen:
           Exception if OAuth2 scope "user-library-read" is missing.
         """
         if "user-library-read" not in self.scopes:
-            raise Exception(
-                "the following scopes need to be set: user-library-read")
+            raise Exception("the following scopes need to be set: user-library-read")
         items = True
         offset = 0
         uri_list = []
@@ -203,8 +221,7 @@ class spotifycodegen:
           Exception if OAuth2 scope "user-follow-read" is missing.
         """
         if "user-follow-read" not in self.scopes:
-            raise Exception(
-                "the following scopes need to be set: user-follow-read")
+            raise Exception("the following scopes need to be set: user-follow-read")
         uri_list = []
         results = self.sp.current_user_followed_artists(limit=50)
         for artist in results["artists"]["items"]:
