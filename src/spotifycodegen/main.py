@@ -26,12 +26,12 @@ class SpotifyCodeGen:
           output_dir: directory where generated codes should be written to.
           scopes: list of OAuth2 scopes to be passed.
         """
-        self.scopes = scopes
-
         if scopes is None:
+            self.scopes = []
             auth_manager = SpotifyClientCredentials()
             self.sp = spotipy.Spotify(auth_manager=auth_manager)
         else:
+            self.scopes = scopes
             self.sp = spotipy.Spotify(
                 auth_manager=SpotifyOAuth(
                     scope=scopes, redirect_uri="http://127.0.0.1:9090"
