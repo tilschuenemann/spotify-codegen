@@ -3,6 +3,6 @@
 ## spotifycodegen
 
 ```{eval-rst}
-.. automodule:: spotifycodegen
+.. autoclass:: spotifycodegen.main::SpotifyCodeGen
    :members:
 ```

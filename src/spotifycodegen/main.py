@@ -15,7 +15,7 @@ from spotipy.oauth2 import SpotifyOAuth
 
 
 class SpotifyCodeGen:
-    """Spotify Codegenerator."""
+    """SpotifyCodeGen."""
 
     def __init__(
         self, output_dir: pathlib.Path | None = None, scopes: List[str] | None = None
