@@ -23,11 +23,25 @@
 
 ## Features
 
-- TODO
+Spotify removed the feature to get a stitched image of an album / artist / track cover with their own Spotify Code. This package mimicks that behaviour and creates stitches, based on supplied
+
+- URL
+- URI
+- query
+
+It's also possible to use create stitches for:
+
+- all saved albums
+- 50 followed artists (limit imposed by Spotify API)
 
 ## Requirements
 
-- TODO
+You'll need to have a Spotify Client ID & Secret in order to make API requests. Specify as environment variable like this:
+
+```console
+$ export SPOTIPY_CLIENT_ID="your_client_id"
+$ export SPOTIPY_CLIENT_ID="your_client_secret"
+```
 
 ## Installation
 

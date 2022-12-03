@@ -1,7 +1,7 @@
 # Usage
 
 ```{eval-rst}
-.. click:: spotifycodegen.__main__:main
+.. click:: spotifycodegen.cli:cli
     :prog: spotify-codegen
     :nested: full
 ```
