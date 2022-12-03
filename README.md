@@ -34,6 +34,8 @@ It's also possible to use create stitches for:
 - all saved albums
 - 50 followed artists (limit imposed by Spotify API)
 
+[You can also try the Streamlit showcase here.](https://tilschuenemann-showcase-showcasesstart-0ndtb3.streamlit.app/spotify_codegen)
+
 ## Requirements
 
 You'll need to have a Spotify Client ID & Secret in order to make API requests. Specify as environment variable like this:
