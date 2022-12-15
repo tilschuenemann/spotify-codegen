@@ -14,6 +14,7 @@ packages = [
 classifiers = [
     "Development Status :: 3 - Alpha",
 ]
+keywords = ["spotify-codegen", "spoticode","spotify","spotipy","art","code","qr","album","track","song","album","generator"]
 
 [tool.poetry.urls]
 Changelog = "https://github.com/tilschuenemann/spotify-codegen/releases"
