@@ -1,9 +1,10 @@
 """Tests for SpotifyCodeGen."""
-
 from pathlib import Path
 
 import pytest
+from click.testing import CliRunner
 
+from spotifycodegen.cli import cli
 from spotifycodegen.main import SpotifyCodeGen
 
 
@@ -43,12 +44,32 @@ def track_url() -> str:
     return "https://open.spotify.com/track/74tDlAxO8vGECwUCaZHujI?si=703973a3d84c4187"
 
 
-@pytest.fixture
+@pytest.fixture()
 def output_dir(tmp_path: Path) -> Path:
     """Pytest fixture for creating a temparary output directory."""
     d = tmp_path / "output_dir"
     d.mkdir()
     return d
+
+
+@pytest.fixture
+def runner() -> CliRunner:
+    """Fixture for invoking command-line interfaces."""
+    return CliRunner()
+
+
+def test_cli(runner: CliRunner, output_dir: Path) -> None:
+    """It exits with a status code of zero."""
+    args = [
+        ["--output_dir", str(output_dir), "album", "remain in light"],
+        ["artist", "talking heads"],
+        ["track", "talking heads once in a lifetime"],
+    ]
+
+    # TODO missing test for uri and url
+    for arg in args:
+        result = runner.invoke(cli, arg)
+        assert result.exit_code == 0
 
 
 def count_files(dir: Path) -> int:
