@@ -35,7 +35,7 @@ def cli(ctx: Context, output_dir: Path) -> None:
 def uri_list(ctx: Context, uris: List[str]) -> None:
     """Get codes for a list of URIs."""
     s = SpotifyCodeGen(output_dir=ctx.obj["output_dir"])
-    s.gen_codes_urls(uris)
+    s.gen_codes_uris(uris=uris)
 
 
 @cli.command("urls", help="Get codes for a list of URLs.")
@@ -44,34 +44,34 @@ def uri_list(ctx: Context, uris: List[str]) -> None:
 def url_list(ctx: Context, urls: List[str]) -> None:
     """Get codes for a list of URLs."""
     s = SpotifyCodeGen(output_dir=ctx.obj["output_dir"])
-    s.gen_codes_urls(urls)
+    s.gen_codes_urls(urls=urls)
 
 
 @cli.command("album", help="Query Spotify for an album name and generate code.")
-@click.argument("album", nargs=1, required=True)
+@click.argument("query", nargs=1, required=True)
 @click.pass_context
 def album(ctx: Context, query: str) -> None:
     """Query Spotify for an album name and generate code."""
     s = SpotifyCodeGen(output_dir=ctx.obj["output_dir"])
-    s.gen_codes_query(query, "album")
+    s.gen_codes_query(search_term=query, search_type="album")
 
 
 @cli.command("artist", help="Query Spotify for an artist name and generate code.")
-@click.argument("artist", nargs=1, required=True)
+@click.argument("query", nargs=1, required=True)
 @click.pass_context
 def artist(ctx: Context, query: str) -> None:
     """Query Spotify for an artist name and generate code."""
     s = SpotifyCodeGen(output_dir=ctx.obj["output_dir"])
-    s.gen_codes_query(query, "artist")
+    s.gen_codes_query(search_term=query, search_type="artist")
 
 
 @cli.command("track", help="Query Spotify for a track name and generate code.")
-@click.argument("track", nargs=1, required=True)
+@click.argument("query", nargs=1, required=True)
 @click.pass_context
 def track(ctx: Context, query: str) -> None:
     """Query Spotify for a track name and generate code."""
     s = SpotifyCodeGen(output_dir=ctx.obj["output_dir"])
-    s.gen_codes_query(query, "track")
+    s.gen_codes_query(search_term=query, search_type="track")
 
 
 @cli.command("saved-albums", help="Get codes for all saved albums.")
