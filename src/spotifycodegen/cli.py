@@ -20,6 +20,7 @@ from spotifycodegen.main import SpotifyCodeGen
         writable=True,
         readable=True,
     ),
+    default=Path.cwd(),
     help="Output directory where files get written to.",
 )
 @click.pass_context
