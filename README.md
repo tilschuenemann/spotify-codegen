@@ -23,9 +23,9 @@
 
 ## Features
 
-Spotify stopped giving users an easy way to grab the song, artist or album artwork with the respective Spotify Code  - `spotify-codegen` to the rescue! 
+Spotify stopped giving users an easy way to grab the song, artist or album artwork with the respective Spotify Code - `spotify-codegen` to the rescue!
 
-You can stitch the album | track | artist artwork with the Spotify Code by supplying: 
+You can stitch the album | track | artist artwork with the Spotify Code by supplying:
 
 - URL(s)
 - URI(s)
@@ -35,7 +35,6 @@ It's also possible to use create stitches for:
 
 - all of your saved albums
 - 50 followed artists (limit imposed by Spotify API)
-
 
 ## Requirements
 
