@@ -23,27 +23,29 @@
 
 ## Features
 
-Spotify removed the feature to get a stitched image of an album / artist / track cover with their own Spotify Code. This package mimicks that behaviour and creates stitches, based on supplied
+Spotify stopped giving users an easy way to grab the song, artist or album artwork with the respective Spotify Code - `spotify-codegen` to the rescue!
 
-- URL
-- URI
-- query
+You can stitch the album | track | artist artwork with the Spotify Code by supplying:
+
+- URL(s)
+- URI(s)
+- a search query
 
 It's also possible to use create stitches for:
 
-- all saved albums
+- all of your saved albums
 - 50 followed artists (limit imposed by Spotify API)
-
-[You can also try the Streamlit showcase here.](https://tilschuenemann-showcase-showcasesstart-0ndtb3.streamlit.app/spotify_codegen)
 
 ## Requirements
 
-You'll need to have a Spotify Client ID & Secret in order to make API requests. Specify as environment variable like this:
+To use the Spotify API, you'll have to login using your credentials and create an app. That apps ID and secret need to be specified as environment variables:
 
 ```console
 $ export SPOTIPY_CLIENT_ID="your_client_id"
-$ export SPOTIPY_CLIENT_ID="your_client_secret"
+$ export SPOTIPY_CLIENT_SECRET="your_client_secret"
 ```
+
+You can now use both the CLI and the Python API!
 
 ## Installation
 
