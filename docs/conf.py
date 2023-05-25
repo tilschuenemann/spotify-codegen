@@ -2,7 +2,7 @@
 
 project = "spotify-codegen"
 author = "Til Schünemann"
-copyright = "2022, Til Schünemann"
+copyright = "2023, Til Schünemann"
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
