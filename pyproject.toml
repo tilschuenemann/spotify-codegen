@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "spotify-codegen"
-version = "0.3.3"
+version = "0.3.4"
 description = "spotify-codegen"
 authors = ["Til Schünemann <til.schuenemann@mailbox.org>"]
 license = "MIT"
