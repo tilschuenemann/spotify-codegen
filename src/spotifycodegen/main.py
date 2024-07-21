@@ -1,4 +1,5 @@
 """SpotifyCodeGen."""
+
 import io
 import os
 import pathlib
