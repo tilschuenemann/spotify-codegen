@@ -54,6 +54,7 @@ jobs:
 
       - name: Install Poetry
         run: |
+          pipx environment
           pipx install poetry --verbose
           poetry --version
 
@@ -124,7 +125,6 @@ jobs:
 
       - name: Install Poetry
         run: |
-          pipx environment
           pipx install --pip-args="--constraint=.github/workflows/constraints.txt" poetry
           poetry --version
 
