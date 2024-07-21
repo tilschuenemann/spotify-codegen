@@ -8,13 +8,22 @@ readme = "README.md"
 homepage = "https://github.com/tilschuenemann/spotify-codegen"
 repository = "https://github.com/tilschuenemann/spotify-codegen"
 documentation = "https://spotify-codegen.readthedocs.io"
-packages = [
-    { include = "spotifycodegen", from = "src" },
+packages = [{ include = "spotifycodegen", from = "src" }]
+classifiers = ["Development Status :: 3 - Alpha"]
+keywords = [
+    "spotify-codegen",
+    "spoticode",
+    "spotify",
+    "spotipy",
+    "art",
+    "code",
+    "qr",
+    "album",
+    "track",
+    "song",
+    "album",
+    "generator",
 ]
-classifiers = [
-    "Development Status :: 3 - Alpha",
-]
-keywords = ["spotify-codegen", "spoticode","spotify","spotipy","art","code","qr","album","track","song","album","generator"]
 
 [tool.poetry.urls]
 Changelog = "https://github.com/tilschuenemann/spotify-codegen/releases"
@@ -23,14 +32,14 @@ Changelog = "https://github.com/tilschuenemann/spotify-codegen/releases"
 python = "^3.10"
 click = ">=8.0.1"
 spotipy = "^2.21.0"
-pillow = "^9.3.0"
 colorthief = "^0.2.1"
 tqdm = "^4.64.1"
+pillow = "^10.4.0"
 
 [tool.poetry.dev-dependencies]
 Pygments = ">=2.10.0"
 black = ">=21.10b0"
-coverage = {extras = ["toml"], version = ">=6.2"}
+coverage = { extras = ["toml"], version = ">=6.2" }
 darglint = ">=1.8.1"
 flake8 = ">=4.0.1"
 flake8-bandit = ">=2.1.2"
@@ -43,20 +52,21 @@ pep8-naming = ">=0.12.1"
 pre-commit = ">=2.16.0"
 pre-commit-hooks = ">=4.1.0"
 pyupgrade = ">=2.29.1"
-safety = ">=1.10.3"
-sphinx = ">=4.3.2"
 sphinx-autobuild = ">=2021.3.14"
 sphinx-click = ">=3.0.2"
 typeguard = ">=2.13.3"
-xdoctest = {extras = ["colors"], version = ">=0.15.10"}
-myst-parser = {version = ">=0.16.1"}
+xdoctest = { extras = ["colors"], version = ">=0.15.10" }
 types-requests = "^2.28.11.5"
 sphinx-rtd-theme = "^1.1.1"
 pytest = "^7.2.0"
+safety = "^3.2.4"
+myst-parser = "^3.0.1"
 
 [tool.poetry.scripts]
 spotifycodegen = "spotifycodegen.cli:cli"
 
+
+[tool.poetry.group.dev.dependencies]
 
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]
