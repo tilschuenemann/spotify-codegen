@@ -54,6 +54,8 @@ jobs:
 
       - name: Install Poetry
         run: |
+          ls .github/workflows
+          pwd
           pipx install --pip-args=--constraint=".github/workflows/constraints.txt" poetry
           poetry --version
 
