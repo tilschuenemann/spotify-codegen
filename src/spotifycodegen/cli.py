@@ -1,4 +1,5 @@
 """CLI for using SpotifyCodeGen."""
+
 from pathlib import Path
 from typing import List
 
